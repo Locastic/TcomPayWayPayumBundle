@@ -44,5 +44,5 @@
     "autoload": {
         "psr-0": {"Locastic\\TcomPaywayPayumBundle": ""}
     },
-    "target-dir": "Locastic/Bundle/TcomPaywayPayumBundle"
+    "target-dir": "Locastic/TcomPaywayPayumBundle"
 }
