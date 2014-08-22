@@ -42,10 +42,7 @@
         "bin-dir": "bin"
     },
     "autoload": {
-        "psr-0": {
-            "Locastic\\TcomPayWayPayum": "src/",
-            "TcomPayWay": "src/",
-            "Locastic\\TcomPayWayPayumBundle": "src/"
-        }
-    }
+        "psr-0": {"Locastic\\TcomPaywayPayumBundle": ""}
+    },
+    "target-dir": "Locastic/Bundle/TcomPaywayPayumBundle"
 }
