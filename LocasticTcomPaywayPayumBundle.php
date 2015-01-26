@@ -2,7 +2,7 @@
 
 namespace Locastic\TcomPaywayPayumBundle;
 
-use Locastic\TcomPayWayPayum\Bridge\Symfony\TcomPayWayPaymentFactory;
+use Locastic\TcomPaywayPayumBundle\Bridge\Symfony\TcomPayWayPaymentFactory;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Payum\Bundle\PayumBundle\DependencyInjection\PayumExtension;

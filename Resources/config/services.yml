@@ -1,6 +1,6 @@
 services:
     payum.tcompayway.action.capture_payment:
-        class: Locastic\TcomPayWayPayum\Action\CaptureAction
+        class: Locastic\TcomPaywayPayumBundle\Action\CaptureAction
         tags:
             - { name: payum.action, factory: tcompayway }
 
