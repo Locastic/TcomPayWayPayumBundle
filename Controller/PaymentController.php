@@ -39,6 +39,6 @@ class PaymentController extends Controller
             }
         }
 
-        return $this->render('LocasticTcomPaywayPayumBundle:TcomPayWay:done.html.twig');
+        return $this->render($this->container->getParameter('done_template'));
     }
 }

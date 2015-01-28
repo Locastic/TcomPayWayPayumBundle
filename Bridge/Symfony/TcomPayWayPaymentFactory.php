@@ -25,6 +25,13 @@ class TcomPayWayPaymentFactory extends AbstractPaymentFactory
         $captureAction = new Definition;
         $captureAction->setClass('Locastic\TcomPaywayPayumBundle\Action\CaptureAction');
         $captureAction->setPublic(false);
+        $captureAction->setArguments(array(
+            'shop_id' => $config['shop_id'],
+            'shop_username' => $config['shop_username'],
+            'shop_password' => $config['shop_password'],
+            'shop_secret_key' => $config['shop_secret_key'],
+            'secure3d_template' => $config['secure3d_template'],
+        ));
         $captureAction->addTag(
             'payum.action',
             array(
@@ -43,6 +50,9 @@ class TcomPayWayPaymentFactory extends AbstractPaymentFactory
             )
         );
         $container->setDefinition('locastic.tcompayway_payum.action.status', $statusAction);
+
+        $container->setParameter('done_template', $config['done_template']);
+        $container->setParameter('prepare_template', $config['prepare_template']);
     }
 
     /**
@@ -102,13 +112,13 @@ class TcomPayWayPaymentFactory extends AbstractPaymentFactory
                         ->defaultValue('https://pgw.t-com.hr/MerchantPayment/PaymentWS.asmx')
                     ->end()
                     ->scalarNode('done_template')
-                        ->defaultValue('https://pgw.t-com.hr/MerchantPayment/PaymentWS.asmx')
+                        ->defaultValue('LocasticTcomPaywayPayumBundle:TcomPayWay:done.html.twig')
                     ->end()
                     ->scalarNode('prepare_template')
-                        ->defaultValue('https://pgw.t-com.hr/MerchantPayment/PaymentWS.asmx')
+                        ->defaultValue('LocasticTcomPaywayPayumBundle:TcomPayWay:prepare.html.twig')
                     ->end()
                     ->scalarNode('secure3d_template')
-                        ->defaultValue('https://pgw.t-com.hr/MerchantPayment/PaymentWS.asmx')
+                        ->defaultValue('LocasticTcomPaywayPayumBundle:TcomPayWay:secure3d.html.twig')
                     ->end()
                 ->end()
             ->end();

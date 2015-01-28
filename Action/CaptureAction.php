@@ -24,6 +24,25 @@ use Payum\Core\Request\ObtainCreditCard;
 
 class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
 {
+    private $shop_id;
+
+    private $shop_username;
+
+    private $shop_password;
+
+    private $shop_secret_key;
+
+    private $secure3d_template;
+
+    function __construct($shop_id, $shop_username, $shop_password, $shop_secret_key, $secure3d_template)
+    {
+        $this->shop_id = $shop_id;
+        $this->shop_username = $shop_username;
+        $this->shop_password = $shop_password;
+        $this->shop_secret_key = $shop_secret_key;
+        $this->secure3d_template = $secure3d_template;
+    }
+
     /**
      * @var TcomPayWayPaymentProcessHandler
      */
@@ -110,7 +129,7 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
             }
         }
 
-        $shop = new Shop();
+        $shop = new Shop($this->shop_id, $this->shop_username, $this->shop_password, $this->shop_secret_key);
         $customersClient = new CustomersClient($model['httpAccept'], $model['httpUserAgent'], $model['originIP']);
 
         $customer = new Customer(
@@ -154,7 +173,7 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
                 $model['TermUrl'] = $request->getToken()->getTargetUrl();
 
                 $secure3dTmpl = new RenderTemplate(
-                    'LocasticTcomPaywayPayumBundle:TcomPayWay:secure3d.html.twig', array(
+                    $this->secure3d_template, array(
                         'ASCUrl' => $response['ASCUrl'],
                         'PaReq' => $response['PaReq'],
                         'TermUrl' => $request->getToken()->getTargetUrl(),
