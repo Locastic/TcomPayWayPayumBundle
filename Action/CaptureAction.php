@@ -52,7 +52,11 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
         }
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
-        if ($model['paymentStatus'] != 'secure3d' && $model['paymentStatus'] != 'error') {
+        if (
+            $model['paymentStatus'] != 'secure3d' &&
+            $model['paymentStatus'] != 'error' &&
+            $model['paymentStatus'] != 'finished' &&
+            $model['paymentStatus'] != 'success') {
             if (false == $model['httpUserAgent']) {
                 $this->payment->execute($httpRequest = new GetHttpRequest());
                 $model['httpUserAgent'] = $httpRequest->userAgent;
