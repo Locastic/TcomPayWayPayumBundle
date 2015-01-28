@@ -42,6 +42,6 @@ class CreditCardType extends CreditCardTypeBase
 
     public function getName()
     {
-        return 'locastic_credit_card';
+        return 'payum_credit_card';
     }
 }

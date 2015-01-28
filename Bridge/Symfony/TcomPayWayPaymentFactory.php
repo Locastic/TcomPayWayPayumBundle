@@ -101,6 +101,15 @@ class TcomPayWayPaymentFactory extends AbstractPaymentFactory
                     ->scalarNode('api_options_url')
                         ->defaultValue('https://pgw.t-com.hr/MerchantPayment/PaymentWS.asmx')
                     ->end()
+                    ->scalarNode('done_template')
+                        ->defaultValue('https://pgw.t-com.hr/MerchantPayment/PaymentWS.asmx')
+                    ->end()
+                    ->scalarNode('prepare_template')
+                        ->defaultValue('https://pgw.t-com.hr/MerchantPayment/PaymentWS.asmx')
+                    ->end()
+                    ->scalarNode('secure3d_template')
+                        ->defaultValue('https://pgw.t-com.hr/MerchantPayment/PaymentWS.asmx')
+                    ->end()
                 ->end()
             ->end();
     }
