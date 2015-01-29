@@ -10,4 +10,10 @@ use Payum\Core\Model\Token;
  */
 class PaymentToken extends Token
 {
+    /**
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    protected $id;
 }
