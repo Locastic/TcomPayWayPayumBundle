@@ -2,7 +2,7 @@
 
 namespace Locastic\TcomPaywayPayumBundle\Form\Type;
 
-use Payum\Bundle\PayumBundle\Form\Type\CreditCardType as CreditCardTypeBase;
+use Payum\Core\Bridge\Symfony\Form\Type\CreditCardType as CreditCardTypeBase;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 

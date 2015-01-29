@@ -14,18 +14,6 @@ use Payum\Core\Request\ObtainCreditCard;
 
 class CapturePaymentAction extends PaymentAwareAction
 {
-    /**
-     * @var GenericTokenFactoryInterface
-     */
-    protected $tokenFactory;
-
-    /**
-     * @param GenericTokenFactoryInterface $tokenFactory
-     */
-    public function __construct(GenericTokenFactoryInterface $tokenFactory)
-    {
-        $this->tokenFactory = $tokenFactory;
-    }
 
     /**
      * {@inheritdoc}
@@ -60,12 +48,12 @@ class CapturePaymentAction extends PaymentAwareAction
     /**
      * {@inheritdoc}
      */
-    protected function composeDetails(PaymentInterface $payment, TokenInterface $token)
+    protected function composeDetails(PaymentInterface $payment)
     {
         if ($payment->getDetails()) {
+
             return;
         }
-
         $order = $payment->getOrder();
 
         $details = array();
@@ -73,9 +61,9 @@ class CapturePaymentAction extends PaymentAwareAction
         $details['firstName'] = $order->getBillingAddress()->getFirstName();
         $details['lastName'] = $order->getBillingAddress()->getLastName();
         $details['email'] = $order->getUser()->getEmail();
-        $details['address'] = $order->getBillingAddress()->getAddress();
+        $details['address'] = $order->getBillingAddress()->getStreet();
         $details['city'] = $order->getBillingAddress()->getCity();
-        $details['zipCode'] = $order->getBillingAddress()->getZipCode();
+        $details['zipCode'] = $order->getBillingAddress()->getPostCode();
         $details['country'] = $order->getBillingAddress()->getCountry();
         $details['phoneNumber'] = $order->getBillingAddress()->getPhoneNumber();
         $details['amount'] = $order->getTotal();
