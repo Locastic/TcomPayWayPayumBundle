@@ -27,6 +27,10 @@
         {
             "name": "Antonio Perić",
             "email": "antonio@locastic.com"
+        },
+        {
+            "name": "Kruno Knego",
+            "email": "kruno@locastic.com"
         }
     ],
     "require": {
