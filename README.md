@@ -59,3 +59,8 @@ Apart from basic installation for integration with sylius you have to add this p
             tags:
                 - { name: payum.action, factory: tcompayway, prepend: true }
 
+
+## To do:
+- decouple labels and add support for translations
+- add configuration for installments 
+- add javascript validation and automatic pick of credit card by card number
