@@ -31,10 +31,10 @@ so you can replace them with your own templates.
         contexts:
             tcompayway:
                 tcompayway:
-                    shop_id:              YOUR_SHOP_ID
-                    shop_username:        YOUR_SHOP_USERNAME
-                    shop_password:        YOUR_SHOP_PASSWORD
-                    shop_secret_key:      YOUR_SHOP_SECRET
+                    shop_id:              YOUR_SHOP_ID // Required
+                    shop_username:        YOUR_SHOP_USERNAME // Required
+                    shop_password:        YOUR_SHOP_PASSWORD // Required
+                    shop_secret_key:      YOUR_SHOP_SECRET // Required
                     secure3d_template:     LocasticWebBundle:Frontend/Payum:secure3d.html.twig
                     prepare_template:      LocasticWebBundle:Frontend/Payum:prepare.html.twig
                     done_template:      LocasticWebBundle:Frontend/Payum:done.html.twig
@@ -59,3 +59,8 @@ Apart from basic installation for integration with sylius you have to add this p
             tags:
                 - { name: payum.action, factory: tcompayway, prepend: true }
 
+
+## To do:
+- decouple labels and add support for translations
+- add configuration for installments 
+- add javascript validation and automatic pick of credit card by card number
