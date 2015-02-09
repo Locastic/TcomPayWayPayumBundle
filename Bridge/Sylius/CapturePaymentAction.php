@@ -27,7 +27,7 @@ class CapturePaymentAction extends PaymentAwareAction
         /** @var $payment PaymentInterface */
         $payment = $request->getModel();
 
-        $this->composeDetails($payment, $request->getToken());
+        $this->composeDetails($payment);
 
         $details = ArrayObject::ensureArrayObject($payment->getDetails());
 
