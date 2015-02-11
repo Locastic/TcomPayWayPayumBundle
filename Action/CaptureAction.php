@@ -34,19 +34,33 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
 
     private $secure3d_template;
 
-    function __construct($shop_id, $shop_username, $shop_password, $shop_secret_key, $secure3d_template)
-    {
-        $this->shop_id = $shop_id;
-        $this->shop_username = $shop_username;
-        $this->shop_password = $shop_password;
-        $this->shop_secret_key = $shop_secret_key;
-        $this->secure3d_template = $secure3d_template;
-    }
+    private $mode;
+
+    private $numOfInstallments;
+
 
     /**
      * @var TcomPayWayPaymentProcessHandler
      */
     protected $api;
+
+    function __construct(
+        $shop_id,
+        $shop_username,
+        $shop_password,
+        $shop_secret_key,
+        $secure3d_template,
+        $mode,
+        $numOfInstallments
+    ) {
+        $this->shop_id = $shop_id;
+        $this->shop_username = $shop_username;
+        $this->shop_password = $shop_password;
+        $this->shop_secret_key = $shop_secret_key;
+        $this->secure3d_template = $secure3d_template;
+        $this->mode = $mode;
+        $this->numOfInstallments = $numOfInstallments;
+    }
 
     /**
      * {@inheritDoc}
@@ -119,8 +133,8 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
                     $model['zipCode'] = $card->getZipCode();
                     $model['country'] = $card->getCountry();
                     $model['phoneNumber'] = $card->getPhoneNumber();
-                    $model['numOfInstallments'] = 1;
-                    $model['paymentMode'] = 1;
+                    $model['numOfInstallments'] = $this->numOfInstallments;
+                    $model['paymentMode'] = $this->mode;
                 } catch (RequestNotSupportedException $e) {
                     throw new LogicException(
                         'Credit card details has to be set explicitly or there has to be an action that supports ObtainCreditCard request.'
