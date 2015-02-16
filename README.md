@@ -31,11 +31,6 @@ so you can replace them with your own templates.
         contexts:
             tcompayway:
                 tcompayway:
-                    shop_id:              YOUR_SHOP_ID # Required
-                    shop_username:        YOUR_SHOP_USERNAME # Required
-                    shop_password:        YOUR_SHOP_PASSWORD # Required
-                    shop_secret_key:      YOUR_SHOP_SECRET # Required
-                    shop_name:            YOUR_SHOP_NAME # Required
                     preauth_required:     1 # Default is 1.  1 means preauthorization of bills required
                     secure3d_template:     LocasticWebBundle:Frontend/Payum:secure3d.html.twig
                     prepare_template:      LocasticWebBundle:Frontend/Payum:prepare.html.twig
@@ -58,9 +53,17 @@ Apart from basic installation for integration with sylius you have to add this p
     services:
         payum.tcompayway.action.capture_payment:
             class: Locastic\TcomPaywayPayumBundle\Bridge\Sylius\CapturePaymentAction
-            arguments: ["%shop_name%"]
+            arguments: ["%tcompayway.shop_name%"]
             tags:
                 - { name: payum.action, factory: tcompayway, prepend: true }
+
+## Parameters configuration
+
+tcompayway.shop_id : 'YOUR_ID'
+tcompayway.shop_username: 'YOUR_USERNAME'
+tcompayway.shop_password: 'YOUR_PASSWORD'
+tcompayway.shop_secret_key: 'YOUR_SECRET_KEY'
+tcompayway.shop_name: 'YOUR_SHOP_NAME'
 
 
 ## To do:

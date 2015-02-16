@@ -26,12 +26,13 @@ class TcomPayWayPaymentFactory extends AbstractPaymentFactory
         $captureAction->setClass('Locastic\TcomPaywayPayumBundle\Action\CaptureAction');
         $captureAction->setPublic(false);
         $captureAction->setArguments(array(
-            'shop_id' => $config['shop_id'],
-            'shop_username' => $config['shop_username'],
-            'shop_password' => $config['shop_password'],
-            'shop_secret_key' => $config['shop_secret_key'],
+            'shop_id' => $container->getParameter('tcompayway.shop_id'),
+            'shop_username' => $container->getParameter('tcompayway.shop_username'),
+            'shop_password' => $container->getParameter('tcompayway.shop_password'),
+            'shop_secret_key' => $container->getParameter('tcompayway.shop_secret_key'),
             'secure3d_template' => $config['secure3d_template'],
             'preauth_required' => !$config['preauth_required'],
+            'numOfInstallments' => $config['numOfInstallments'],
         ));
         $captureAction->addTag(
             'payum.action',
@@ -84,26 +85,6 @@ class TcomPayWayPaymentFactory extends AbstractPaymentFactory
 
         $builder
                 ->children()
-                    ->scalarNode('shop_id')
-                        ->isRequired()
-                        ->cannotBeEmpty()
-                    ->end()
-                    ->scalarNode('shop_username')
-                        ->isRequired()
-                        ->cannotBeEmpty()
-                    ->end()
-                    ->scalarNode('shop_password')
-                        ->isRequired()
-                        ->cannotBeEmpty()
-                    ->end()
-                    ->scalarNode('shop_secret_key')
-                        ->isRequired()
-                        ->cannotBeEmpty()
-                    ->end()
-                    ->scalarNode('shop_name')
-                        ->isRequired()
-                        ->cannotBeEmpty()
-                    ->end()
                     ->scalarNode('preauth_required')
                         ->defaultValue(1)
                     ->end()
