@@ -23,17 +23,17 @@
                 <option name="min">2</option>
                 <option name="groups">Payum</option>
             </constraint>
-            <property name="number">
-                <constraint name="CardScheme">
-                    <option name="schemes">
-                        <value>VISA</value>
-                        <value>AMEX</value>
-                        <value>MAESTRO</value>
-                        <value>MASTERCARD</value>
-                    </option>
-                    <option name="message">Your credit card number is invalid.</option>
-                </constraint>
-            </property>
+        </property>
+        <property name="number">
+            <constraint name="CardScheme">
+                <option name="schemes">
+                    <value>VISA</value>
+                    <value>AMEX</value>
+                    <value>MAESTRO</value>
+                    <value>MASTERCARD</value>
+                </option>
+                <option name="message">Your credit card number is invalid.</option>
+            </constraint>
         </property>
     </class>
 </constraint-mapping>
