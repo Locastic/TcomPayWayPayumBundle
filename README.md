@@ -59,11 +59,12 @@ Apart from basic installation for integration with sylius you have to add this p
 
 ## Parameters configuration
 
-tcompayway.shop_id : 'YOUR_ID'
-tcompayway.shop_username: 'YOUR_USERNAME'
-tcompayway.shop_password: ?
-tcompayway.shop_secret_key
-tcompayway.shop_name
+    # app/config/parameters.yml
+    tcompayway.shop_id : 'YOUR_ID'
+    tcompayway.shop_username: 'YOUR_USERNAME'
+    tcompayway.shop_password: 'YOUR_PASSWORD'
+    tcompayway.shop_secret_key: 'YOUR_SECRET'
+    tcompayway.shop_name: 'YOUR_SHOP_NAME'
 
 
 ## To do:
