@@ -85,6 +85,9 @@ class TcomPayWayPaymentFactory extends AbstractPaymentFactory
 
         $builder
                 ->children()
+                    ->scalarNode('numOfInstallments')
+                        ->defaultValue(1)
+                    ->end()
                     ->scalarNode('preauth_required')
                         ->defaultValue(1)
                     ->end()
