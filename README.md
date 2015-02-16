@@ -31,12 +31,12 @@ so you can replace them with your own templates.
         contexts:
             tcompayway:
                 tcompayway:
-                    shop_id:              YOUR_SHOP_ID // Required
-                    shop_username:        YOUR_SHOP_USERNAME // Required
-                    shop_password:        YOUR_SHOP_PASSWORD // Required
-                    shop_secret_key:      YOUR_SHOP_SECRET // Required
-                    shop_name:            YOUR_SHOP_NAME // Required
-                    mode:                   0 // Default is 1.  0 means preauthorization of bills required
+                    shop_id:              YOUR_SHOP_ID # Required
+                    shop_username:        YOUR_SHOP_USERNAME # Required
+                    shop_password:        YOUR_SHOP_PASSWORD # Required
+                    shop_secret_key:      YOUR_SHOP_SECRET # Required
+                    shop_name:            YOUR_SHOP_NAME # Required
+                    mode:                   0 # Default is 1.  0 means preauthorization of bills required
                     secure3d_template:     LocasticWebBundle:Frontend/Payum:secure3d.html.twig
                     prepare_template:      LocasticWebBundle:Frontend/Payum:prepare.html.twig
                     done_template:      LocasticWebBundle:Frontend/Payum:done.html.twig
