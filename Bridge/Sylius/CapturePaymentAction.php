@@ -73,12 +73,12 @@ class CapturePaymentAction extends PaymentAwareAction
             $details['address'] = strlen(
                 $address = $order->getPickupAtLocationUserAddress()->getStreet()
             ) > 0 ? $address : '-';
-            $details['city'] = strlen(
-                $city = $order->getPickupAtLocationUserAddress()->getCity()->getName()
-            ) > 0 ? $city : '-';
-            $details['zipCode'] = strlen(
-                $zipCode = $order->getPickupAtLocationUserAddress()->getPostCode()
-            ) > 0 ? $zipCode : '-';
+            $details['city'] = is_null(
+                $city = $order->getPickupAtLocationUserAddress()->getCity()
+            ) ? '-' : $city->getName();
+            $details['zipCode'] = is_null(
+                $city = $order->getPickupAtLocationUserAddress()->getCity()
+            ) ? '-' : $city->getPostalNumber();
             $details['country'] = strlen(
                 $country = $order->getPickupAtLocationUserAddress()->getCountry()
             ) > 0 ? $country : '-';
