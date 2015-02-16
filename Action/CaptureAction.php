@@ -34,7 +34,7 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
 
     private $secure3d_template;
 
-    private $mode;
+    private $preauth_required;
 
     /**
      * @var TcomPayWayPaymentProcessHandler
@@ -47,14 +47,14 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
         $shop_password,
         $shop_secret_key,
         $secure3d_template,
-        $mode
+        $preauth_required
     ) {
         $this->shop_id = $shop_id;
         $this->shop_username = $shop_username;
         $this->shop_password = $shop_password;
         $this->shop_secret_key = $shop_secret_key;
         $this->secure3d_template = $secure3d_template;
-        $this->mode = $mode;
+        $this->preauth_required = $preauth_required;
     }
 
     /**
@@ -129,7 +129,7 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
                     $model['country'] = $card->getCountry();
                     $model['phoneNumber'] = $card->getPhoneNumber();
                     $model['numOfInstallments'] = 1; // TODO set custom number of installments
-                    $model['paymentMode'] = $this->mode;
+                    $model['paymentMode'] = $this->preauth_required;
                 } catch (RequestNotSupportedException $e) {
                     throw new LogicException(
                         'Credit card details has to be set explicitly or there has to be an action that supports ObtainCreditCard request.'
