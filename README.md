@@ -31,10 +31,10 @@ so you can replace them with your own templates.
         contexts:
             tcompayway:
                 tcompayway:
-                    preauth_required:     1 # Default is 1.  1 means preauthorization of bills required
-                    secure3d_template:     LocasticWebBundle:Frontend/Payum:secure3d.html.twig
-                    prepare_template:      LocasticWebBundle:Frontend/Payum:prepare.html.twig
-                    done_template:      LocasticWebBundle:Frontend/Payum:done.html.twig
+                    preauth_required: 1 # Default is 1.  1 means preauthorization of bills required
+                    secure3d_template: LocasticWebBundle:Frontend/Payum:secure3d.html.twig
+                    prepare_template: LocasticWebBundle:Frontend/Payum:prepare.html.twig
+                    done_template: LocasticWebBundle:Frontend/Payum:done.html.twig
                     actions:
                         - locastic.tcompayway_payum.action.capture
                         - locastic.tcompayway_payum.action.status
