@@ -14,6 +14,12 @@ use Payum\Core\Request\ObtainCreditCard;
 
 class CapturePaymentAction extends PaymentAwareAction
 {
+    protected $shopName;
+
+    function __construct($shopName)
+    {
+        $this->shopName = $shopName;
+    }
 
     /**
      * {@inheritdoc}
@@ -58,16 +64,30 @@ class CapturePaymentAction extends PaymentAwareAction
 
         $details = array();
 
-        $details['firstName'] = $order->getBillingAddress()->getFirstName();
-        $details['lastName'] = $order->getBillingAddress()->getLastName();
+        if ($order->getPickupAtLocation()) {
+
+            $details['firstName'] = $order->getPickupAtLocation()->getFirstName();
+            $details['lastName'] = $order->getPickupAtLocation()->getLastName();
+            $details['address'] = $order->getPickupAtLocation()->getStreet();
+            $details['city'] = $order->getPickupAtLocation()->getCity();
+            $details['zipCode'] = $order->getPickupAtLocation()->getPostCode();
+            $details['country'] = $order->getPickupAtLocation()->getCountry();
+            $details['phoneNumber'] = $order->getPickupAtLocation()->getPhoneNumber();
+        } else {
+            $details['firstName'] = $order->getBillingAddress()->getFirstName();
+            $details['lastName'] = $order->getBillingAddress()->getLastName();
+            $details['address'] = $order->getBillingAddress()->getStreet();
+            $details['city'] = $order->getBillingAddress()->getCity();
+            $details['zipCode'] = $order->getBillingAddress()->getPostCode();
+            $details['country'] = $order->getBillingAddress()->getCountry();
+            $details['phoneNumber'] = $order->getBillingAddress()->getPhoneNumber();
+        }
+
         $details['email'] = $order->getUser()->getEmail();
-        $details['address'] = $order->getBillingAddress()->getStreet();
-        $details['city'] = $order->getBillingAddress()->getCity();
-        $details['zipCode'] = $order->getBillingAddress()->getPostCode();
-        $details['country'] = $order->getBillingAddress()->getCountry();
-        $details['phoneNumber'] = $order->getBillingAddress()->getPhoneNumber();
         $details['amount'] = $order->getTotal();
-        $details['shoppingCartId'] = $order->getNumber();
+        $details['shoppingCartId'] = $this->shopName . ' ' . $order->getNumber() . ' (' . (new \DateTime())->format(
+                'd.m.Y.'
+            ) . ')';
 
         $payment->setDetails($details);
     }
@@ -79,7 +99,6 @@ class CapturePaymentAction extends PaymentAwareAction
     {
         return
             $request instanceof Capture &&
-            $request->getModel() instanceof PaymentInterface
-            ;
+            $request->getModel() instanceof PaymentInterface;
     }
 }

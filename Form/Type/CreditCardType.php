@@ -17,12 +17,11 @@ class CreditCardType extends CreditCardTypeBase
 
         $builder
             ->add('holderSurname', 'text', array('label' => 'form.credit_card.holder_surname'))
-            ->add('email', 'email', array('label' => 'form.credit_card.email'))
-            ->add('address', 'text', array('label' => 'form.credit_card.address'))
-            ->add('city', 'text', array('label' => 'form.credit_card.city'))
-            ->add('zipCode', 'text', array('label' => 'form.credit_card.zip_code'))
-            ->add('country', 'country', array('label' => 'form.credit_card.country'))
-            ->add('phoneNumber', 'text', array('required' => false, 'label' => 'form.credit_card.phone_number'));
+            ->add('securityCode', 'text', array(
+                'label' => 'form.credit_card.security_code',
+                'required' => false,
+            ))
+        ;
     }
 
     /**

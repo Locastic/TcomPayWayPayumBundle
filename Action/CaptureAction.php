@@ -36,9 +36,6 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
 
     private $mode;
 
-    private $numOfInstallments;
-
-
     /**
      * @var TcomPayWayPaymentProcessHandler
      */
@@ -50,8 +47,7 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
         $shop_password,
         $shop_secret_key,
         $secure3d_template,
-        $mode,
-        $numOfInstallments
+        $mode
     ) {
         $this->shop_id = $shop_id;
         $this->shop_username = $shop_username;
@@ -59,7 +55,6 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
         $this->shop_secret_key = $shop_secret_key;
         $this->secure3d_template = $secure3d_template;
         $this->mode = $mode;
-        $this->numOfInstallments = $numOfInstallments;
     }
 
     /**
@@ -133,7 +128,7 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
                     $model['zipCode'] = $card->getZipCode();
                     $model['country'] = $card->getCountry();
                     $model['phoneNumber'] = $card->getPhoneNumber();
-                    $model['numOfInstallments'] = $this->numOfInstallments;
+                    $model['numOfInstallments'] = 1; // TODO set custom number of installments
                     $model['paymentMode'] = $this->mode;
                 } catch (RequestNotSupportedException $e) {
                     throw new LogicException(

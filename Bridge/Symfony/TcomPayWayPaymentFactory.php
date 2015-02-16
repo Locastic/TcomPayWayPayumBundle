@@ -32,7 +32,6 @@ class TcomPayWayPaymentFactory extends AbstractPaymentFactory
             'shop_secret_key' => $config['shop_secret_key'],
             'secure3d_template' => $config['secure3d_template'],
             'mode' => $config['mode'],
-            'numOfInstallments' => $config['numOfInstallments'],
         ));
         $captureAction->addTag(
             'payum.action',
@@ -101,8 +100,9 @@ class TcomPayWayPaymentFactory extends AbstractPaymentFactory
                         ->isRequired()
                         ->cannotBeEmpty()
                     ->end()
-                    ->scalarNode('numOfInstallments')
-                        ->defaultValue(1)
+                    ->scalarNode('shop_name')
+                        ->isRequired()
+                        ->cannotBeEmpty()
                     ->end()
                     ->scalarNode('mode')
                         ->defaultValue(1)
