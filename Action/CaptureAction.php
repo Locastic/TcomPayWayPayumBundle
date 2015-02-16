@@ -115,7 +115,16 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
             );
             if (false == $model->validateNotEmpty($cardFields, false)) {
                 try {
-                    $this->payment->execute($creditCardRequest = new ObtainCreditCard());
+                    $creditCardRequest = new ObtainCreditCard();
+                    $prefilledCreditCard = new \Locastic\TcomPaywayPayumBundle\Entity\CreditCard();
+                    $prefilledCreditCard->setHolder($model['firstName']);
+                    $prefilledCreditCard->setHolderSurname($model['lastName']);
+                    $prefilledCreditCard->setNumber("");
+                    $prefilledCreditCard->setExpireAt(new \DateTime());
+                    $prefilledCreditCard->setSecurityCode("");
+                    $creditCardRequest->set($prefilledCreditCard);
+                    $this->payment->execute($creditCardRequest);
+
                     $card = $creditCardRequest->obtain();
                     $model['card_expiration_date'] = $card->getExpireAt()->format('Y-m-d');
                     $model['card_number'] = $card->getNumber();
