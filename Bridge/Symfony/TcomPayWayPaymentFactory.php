@@ -32,7 +32,6 @@ class TcomPayWayPaymentFactory extends AbstractPaymentFactory
             'shop_secret_key' => $container->getParameter('tcompayway.shop_secret_key'),
             'secure3d_template' => $config['secure3d_template'],
             'preauth_required' => !$config['preauth_required'],
-            'numOfInstallments' => $config['numOfInstallments'],
         ));
         $captureAction->addTag(
             'payum.action',
@@ -85,9 +84,6 @@ class TcomPayWayPaymentFactory extends AbstractPaymentFactory
 
         $builder
                 ->children()
-                    ->scalarNode('numOfInstallments')
-                        ->defaultValue(1)
-                    ->end()
                     ->scalarNode('preauth_required')
                         ->defaultValue(1)
                     ->end()
@@ -98,7 +94,7 @@ class TcomPayWayPaymentFactory extends AbstractPaymentFactory
                         ->defaultValue('https://pgw.t-com.hr/MerchantPayment/PaymentWS.asmx')
                     ->end()
                     ->scalarNode('api_options_trace')
-                        ->defaultValue('1')
+                        ->defaultValue(1)
                     ->end()
                     ->scalarNode('api_options_url')
                         ->defaultValue('https://pgw.t-com.hr/MerchantPayment/PaymentWS.asmx')

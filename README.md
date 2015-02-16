@@ -23,7 +23,7 @@ Afterwards register the new bundle in your AppKernel
         );
 
 
-Parameters secure3d_template, prepare_template & done_template are exposed
+Next step is to fill your shop details. Parameters secure3d_template, prepare_template & done_template are exposed
 so you can replace them with your own templates.
 
     # app/config/config.yml
@@ -47,7 +47,7 @@ so you can replace them with your own templates.
 
 ## Sylius installation
 
-Apart from basic installation for integration with Sylius, you have to add new service.
+Apart from basic installation for integration with sylius you have to add this piece of code.
 
     # app/config/config.yml
     services:
@@ -59,13 +59,11 @@ Apart from basic installation for integration with Sylius, you have to add new s
 
 ## Parameters configuration
 
-Next step is to fill your shop details.
-
-    tcompayway.shop_id : 'YOUR_ID'
-    tcompayway.shop_username: 'YOUR_USERNAME'
-    tcompayway.shop_password: 'YOUR_PASSWORD'
-    tcompayway.shop_secret_key: 'YOUR_SECRET_KEY'
-    tcompayway.shop_name: 'YOUR_SHOP_NAME'
+tcompayway.shop_id : 'YOUR_ID'
+tcompayway.shop_username: 'YOUR_USERNAME'
+tcompayway.shop_password: ?
+tcompayway.shop_secret_key
+tcompayway.shop_name
 
 
 ## To do:
