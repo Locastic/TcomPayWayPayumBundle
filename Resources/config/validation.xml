@@ -26,6 +26,7 @@
         </property>
         <property name="number">
             <constraint name="CardScheme">
+                <option name="groups">Payum</option>
                 <option name="schemes">
                     <value>VISA</value>
                     <value>AMEX</value>
