@@ -69,7 +69,7 @@ class CapturePaymentAction extends PaymentAwareAction
             $details['firstName'] = $order->getPickupAtLocation()->getFirstName();
             $details['lastName'] = $order->getPickupAtLocation()->getLastName();
             $details['address'] = $order->getPickupAtLocation()->getStreet();
-            $details['city'] = $order->getPickupAtLocation()->getCity();
+            $details['city'] = $order->getPickupAtLocation()->getCity()->getName();
             $details['zipCode'] = $order->getPickupAtLocation()->getPostCode();
             $details['country'] = $order->getPickupAtLocation()->getCountry();
             $details['phoneNumber'] = $order->getPickupAtLocation()->getPhoneNumber();
@@ -77,7 +77,7 @@ class CapturePaymentAction extends PaymentAwareAction
             $details['firstName'] = $order->getBillingAddress()->getFirstName();
             $details['lastName'] = $order->getBillingAddress()->getLastName();
             $details['address'] = $order->getBillingAddress()->getStreet();
-            $details['city'] = $order->getBillingAddress()->getCity();
+            $details['city'] = $order->getBillingAddress()->getCity()->getName();
             $details['zipCode'] = $order->getBillingAddress()->getPostCode();
             $details['country'] = $order->getBillingAddress()->getCountry();
             $details['phoneNumber'] = $order->getBillingAddress()->getPhoneNumber();
