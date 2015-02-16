@@ -6,7 +6,7 @@
 
     <parameters>
         <parameter key="payum.template.obtain_credit_card">%prepare_template%</parameter>
-        <parameter key="payum.action.obtain_credit_card.class">%prepare_template%</parameter>
+        <parameter key="payum.action.obtain_credit_card.class">Locastic\TcomPaywayPayumBundle\Service\ObtainCreditCardAction</parameter>
     </parameters>
 
    <services>
