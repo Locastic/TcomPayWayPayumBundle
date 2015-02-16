@@ -36,7 +36,7 @@ so you can replace them with your own templates.
                     shop_password:        YOUR_SHOP_PASSWORD # Required
                     shop_secret_key:      YOUR_SHOP_SECRET # Required
                     shop_name:            YOUR_SHOP_NAME # Required
-                    preauth_required:     0 # Default is 1.  0 means preauthorization of bills required
+                    preauth_required:     1 # Default is 1.  1 means preauthorization of bills required
                     secure3d_template:     LocasticWebBundle:Frontend/Payum:secure3d.html.twig
                     prepare_template:      LocasticWebBundle:Frontend/Payum:prepare.html.twig
                     done_template:      LocasticWebBundle:Frontend/Payum:done.html.twig

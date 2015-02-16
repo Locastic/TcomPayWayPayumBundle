@@ -31,7 +31,7 @@ class TcomPayWayPaymentFactory extends AbstractPaymentFactory
             'shop_password' => $config['shop_password'],
             'shop_secret_key' => $config['shop_secret_key'],
             'secure3d_template' => $config['secure3d_template'],
-            'preauth_required' => $config['preauth_required'],
+            'preauth_required' => !$config['preauth_required'],
         ));
         $captureAction->addTag(
             'payum.action',
