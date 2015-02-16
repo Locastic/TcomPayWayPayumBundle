@@ -24,46 +24,5 @@
                 <option name="groups">Payum</option>
             </constraint>
         </property>
-        <property name="email">
-            <constraint name="NotBlank">
-                <option name="groups">Payum</option>
-            </constraint>
-            <constraint name="Email">
-                <option name="checkMX">true</option>
-                <option name="groups">Payum</option>
-            </constraint>
-        </property>
-        <property name="city">
-            <constraint name="NotBlank">
-                <option name="groups">Payum</option>
-            </constraint>
-            <constraint name="Length">
-                <option name="min">2</option>
-                <option name="groups">Payum</option>
-            </constraint>
-        </property>
-        <property name="address">
-            <constraint name="NotBlank">
-                <option name="groups">Payum</option>
-            </constraint>
-            <constraint name="Length">
-                <option name="min">2</option>
-                <option name="groups">Payum</option>
-            </constraint>
-        </property>
-        <property name="zipCode">
-            <constraint name="NotBlank">
-                <option name="groups">Payum</option>
-            </constraint>
-            <constraint name="Length">
-                <option name="min">3</option>
-                <option name="groups">Payum</option>
-            </constraint>
-        </property>
-        <property name="country">
-            <constraint name="NotBlank">
-                <option name="groups">Payum</option>
-            </constraint>
-        </property>
     </class>
 </constraint-mapping>
