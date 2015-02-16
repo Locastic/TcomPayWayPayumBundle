@@ -66,13 +66,22 @@ class CapturePaymentAction extends PaymentAwareAction
 
         if ($order->getPickupAtLocation()) {
 
-            $details['firstName'] = $order->getPickupAtLocation()->getFirstName();
-            $details['lastName'] = $order->getPickupAtLocation()->getLastName();
-            $details['address'] = $order->getPickupAtLocation()->getStreet();
-            $details['city'] = $order->getPickupAtLocation()->getCity()->getName();
-            $details['zipCode'] = $order->getPickupAtLocation()->getPostCode();
-            $details['country'] = $order->getPickupAtLocation()->getCountry();
-            $details['phoneNumber'] = $order->getPickupAtLocation()->getPhoneNumber();
+            $details['firstName'] = $order->getPickupAtLocationUserAddress()->getFirstName();
+            $details['lastName'] = $order->getPickupAtLocationUserAddress()->getLastName();
+            $details['phoneNumber'] = $order->getPickupAtLocationUserAddress()->getPhoneNumber();
+
+            $details['address'] = strlen(
+                $address = $order->getPickupAtLocationUserAddress()->getStreet()
+            ) > 0 ? $address : '-';
+            $details['city'] = strlen(
+                $city = $order->getPickupAtLocationUserAddress()->getCity()->getName()
+            ) > 0 ? $city : '-';
+            $details['zipCode'] = strlen(
+                $zipCode = $order->getPickupAtLocationUserAddress()->getPostCode()
+            ) > 0 ? $zipCode : '-';
+            $details['country'] = strlen(
+                $country = $order->getPickupAtLocationUserAddress()->getCountry()
+            ) > 0 ? $country : '-';
         } else {
             $details['firstName'] = $order->getBillingAddress()->getFirstName();
             $details['lastName'] = $order->getBillingAddress()->getLastName();
