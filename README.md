@@ -45,7 +45,7 @@ so you can replace them with your own templates.
         paths:
             %kernel.root_dir%/../vendor/payum/core/Payum/Core/Resources/views: PayumCore
 
-## Sylius installation
+## Configuration
 
 Apart from basic installation for integration with sylius you have to add this piece of code.
 
@@ -57,7 +57,13 @@ Apart from basic installation for integration with sylius you have to add this p
             tags:
                 - { name: payum.action, factory: tcompayway, prepend: true }
 
-## Parameters configuration
+
+    # Sylius/Bundle/CoreBundle/Resources/config/app/config.yml
+    sylius_payment:
+       gateways:
+           dummy: Defaultni gateway (dummy)
+           tcompayway: T-com PayWay
+
 
     # app/config/parameters.yml
     tcompayway.shop_id : 'YOUR_ID'

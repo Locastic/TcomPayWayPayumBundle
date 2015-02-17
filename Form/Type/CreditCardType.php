@@ -35,6 +35,7 @@ class CreditCardType extends CreditCardTypeBase
             ->setDefaults(
                 array(
                     'data_class' => 'Locastic\TcomPaywayPayumBundle\Entity\CreditCard',
+                    'validation_groups' => array('Locastic'),
                 )
             );
     }
