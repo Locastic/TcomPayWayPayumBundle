@@ -3,15 +3,15 @@ TcomPayWayPayumBundle
 
 ## Prerequisites
 
-For TcomPayPayumBundle to work you have to install Payum. You can read more about payum at their official website
+For TcomPayPayumBundle to work, you have to install Payum. You can read more about Payum at their official website
 [payum](http://payum.org/)
 
 ## Installation
 
-For installation of TcomPaywayPayumBundle just include it in your composer.json file and run composer's update
+For installation of TcomPaywayPayumBundle just include it in your composer.json file and run Composer's update
 command.
 
-Afterwards register the new bundle in your AppKernel
+Afterwards, register the new bundle in your AppKernel.
 
     // app/AppKernel.php
     public function registerBundles()
@@ -31,7 +31,7 @@ so you can replace them with your own templates.
         contexts:
             tcompayway:
                 tcompayway:
-                    preauth_required: 1 # Default is 1.  1 means preauthorization of bills required
+                    preauth_required: 1 # Default is 1 which means preauthorization required
                     secure3d_template: LocasticWebBundle:Frontend/Payum:secure3d.html.twig
                     prepare_template: LocasticWebBundle:Frontend/Payum:prepare.html.twig
                     done_template: LocasticWebBundle:Frontend/Payum:done.html.twig
@@ -47,7 +47,7 @@ so you can replace them with your own templates.
 
 ## Configuration
 
-Apart from basic installation for integration with sylius you have to add this piece of code.
+Now you need to configure capture_payment service, add tcompayway gateway to sylius_payments and add parameters specific for your webshop.
 
     # app/config/config.yml
     services:
@@ -70,8 +70,9 @@ Apart from basic installation for integration with sylius you have to add this p
     tcompayway.shop_username: 'YOUR_USERNAME'
     tcompayway.shop_password: 'YOUR_PASSWORD'
     tcompayway.shop_secret_key: 'YOUR_SECRET'
-    tcompayway.shop_name: 'YOUR_SHOP_NAME'
+    tcompayway.shop_name: 'YOUR_SHOP_NAME' # this will be used in transaction description in user's bank account transactions
 
+You also need to configure payment methods in Sylius administration to use T-com PayWay gateway.
 
 ## To do:
 - decouple labels and add support for translations
