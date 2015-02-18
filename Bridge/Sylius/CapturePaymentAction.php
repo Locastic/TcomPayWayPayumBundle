@@ -69,7 +69,7 @@ class CapturePaymentAction extends PaymentAwareAction
         $details['address'] = $order->getBillingAddress()->getStreet();
         $details['city'] = $order->getBillingAddress()->getCity();
         $details['zipCode'] = $order->getBillingAddress()->getPostCode();
-        $details['country'] = $order->getBillingAddress()->getCountry();
+        $details['country'] = $order->getBillingAddress()->getCountry()->getIsoName();
         $details['phoneNumber'] = $order->getBillingAddress()->getPhoneNumber();
         $details['email'] = $order->getUser()->getEmail();
         $details['amount'] = $order->getTotal();
