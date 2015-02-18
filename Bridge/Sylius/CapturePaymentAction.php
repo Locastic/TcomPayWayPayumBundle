@@ -64,35 +64,13 @@ class CapturePaymentAction extends PaymentAwareAction
 
         $details = array();
 
-        if ($order->getPickupAtLocation()) {
-
-            $details['firstName'] = $order->getPickupAtLocationUserAddress()->getFirstName();
-            $details['lastName'] = $order->getPickupAtLocationUserAddress()->getLastName();
-            $details['phoneNumber'] = $order->getPickupAtLocationUserAddress()->getPhoneNumber();
-
-            $details['address'] = strlen(
-                $address = $order->getPickupAtLocationUserAddress()->getStreet()
-            ) > 0 ? $address : '-';
-            if (is_null($city = $order->getPickupAtLocationUserAddress()->getCity())) {
-                $details['city'] = '-';
-                $details['zipCode'] = '-';
-            } else {
-                $details['city'] = $city->getName();
-                $details['zipCode'] = $city->getPostalNumber();
-            }
-            $details['country'] = strlen(
-                $country = $order->getPickupAtLocationUserAddress()->getCountry()
-            ) > 0 ? $country : '-';
-        } else {
-            $details['firstName'] = $order->getBillingAddress()->getFirstName();
-            $details['lastName'] = $order->getBillingAddress()->getLastName();
-            $details['address'] = $order->getBillingAddress()->getStreet();
-            $details['city'] = $order->getBillingAddress()->getCity()->getName();
-            $details['zipCode'] = $order->getBillingAddress()->getPostCode();
-            $details['country'] = $order->getBillingAddress()->getCountry();
-            $details['phoneNumber'] = $order->getBillingAddress()->getPhoneNumber();
-        }
-
+        $details['firstName'] = $order->getBillingAddress()->getFirstName();
+        $details['lastName'] = $order->getBillingAddress()->getLastName();
+        $details['address'] = $order->getBillingAddress()->getStreet();
+        $details['city'] = $order->getBillingAddress()->getCity()->getName();
+        $details['zipCode'] = $order->getBillingAddress()->getPostCode();
+        $details['country'] = $order->getBillingAddress()->getCountry();
+        $details['phoneNumber'] = $order->getBillingAddress()->getPhoneNumber();
         $details['email'] = $order->getUser()->getEmail();
         $details['amount'] = $order->getTotal();
         $details['shoppingCartId'] = $this->shopName . ' ' . $order->getNumber() . ' (' . (new \DateTime())->format(
