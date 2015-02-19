@@ -122,6 +122,11 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
                     $prefilledCreditCard->setNumber("");
                     $prefilledCreditCard->setExpireAt(new \DateTime());
                     $prefilledCreditCard->setSecurityCode("");
+                    $prefilledCreditCard->setEmail($model['email']);
+                    $prefilledCreditCard->setAddress($model['address']);
+                    $prefilledCreditCard->setZipCode($model['zipCode']);
+                    $prefilledCreditCard->setCountry($model['country']);
+                    $prefilledCreditCard->setPhoneNumber($model['phoneNumber']);
                     $creditCardRequest->set($prefilledCreditCard);
                     $this->payment->execute($creditCardRequest);
 
