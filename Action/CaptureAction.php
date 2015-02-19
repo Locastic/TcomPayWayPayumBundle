@@ -137,6 +137,12 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
                     $model['card_cvd'] = $card->getSecurityCode();
                     $model['firstName'] = $card->getHolder();
                     $model['lastName'] = $card->getHolderSurname();
+                    $model['email'] = $card->getEmail();
+                    $model['address'] = $card->getAddress();
+                    $model['city'] = $card->getCity();
+                    $model['zipCode'] = $card->getZipCode();
+                    $model['country'] = $card->getCountry();
+                    $model['phoneNumber'] = $card->getPhoneNumber();
                     $model['numOfInstallments'] = 1; // TODO set custom number of installments
                     $model['paymentMode'] = $this->preauth_required;
                 } catch (RequestNotSupportedException $e) {
