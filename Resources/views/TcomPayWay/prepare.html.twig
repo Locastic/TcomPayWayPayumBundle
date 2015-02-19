@@ -13,6 +13,36 @@
             {{ form_widget(form.holderSurname) }}
         </div>
         <div>
+            {{ form_errors(form.email) }}
+            {{ form_label(form.email) }}
+            {{ form_widget(form.email) }}
+        </div>
+        <div>
+            {{ form_errors(form.address) }}
+            {{ form_label(form.address) }}
+            {{ form_widget(form.address) }}
+        </div>
+        <div>
+            {{ form_errors(form.city) }}
+            {{ form_label(form.city) }}
+            {{ form_widget(form.city) }}
+        </div>
+        <div>
+            {{ form_errors(form.zipCode) }}
+            {{ form_label(form.zipCode) }}
+            {{ form_widget(form.zipCode) }}
+        </div>
+        <div>
+            {{ form_errors(form.country) }}
+            {{ form_label(form.country) }}
+            {{ form_widget(form.country) }}
+        </div>
+        <div>
+            {{ form_errors(form.phoneNumber) }}
+            {{ form_label(form.phoneNumber) }}
+            {{ form_widget(form.phoneNumber) }}
+        </div>
+        <div>
             {{ form_errors(form.number) }}
             {{ form_label(form.number) }}
             {{ form_widget(form.number) }}
