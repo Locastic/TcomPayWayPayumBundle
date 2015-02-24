@@ -6,6 +6,9 @@ TcomPayWayPayumBundle
 For TcomPayPayumBundle to work, you have to install Payum. You can read more about Payum at their official website
 [payum](http://payum.org/)
 
+On PayumBundle's [get_it_started](https://github.com/Payum/PayumBundle/blob/master/Resources/doc/get_it_started.md)
+you can find more about creating security token and payment details.
+
 ## Installation
 
 For installation of TcomPaywayPayumBundle just include it in your composer.json file and run Composer's update
