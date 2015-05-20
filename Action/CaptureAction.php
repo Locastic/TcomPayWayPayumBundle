@@ -20,6 +20,7 @@ use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Request\ObtainCreditCard;
+use Payum\Core\Security\SensitiveValue;
 
 
 class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
@@ -132,9 +133,9 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
                     $this->payment->execute($creditCardRequest);
 
                     $card = $creditCardRequest->obtain();
-                    $model['card_expiration_date'] = $card->getExpireAt()->format('Y-m-d');
-                    $model['card_number'] = $card->getNumber();
-                    $model['card_cvd'] = $card->getSecurityCode();
+                    $model['card_expiration_date'] = new SensitiveValue($card->getExpireAt()->format('Y-m-d'));
+                    $model['card_number'] = new SensitiveValue($card->getNumber());
+                    $model['card_cvd'] = new SensitiveValue($card->getSecurityCode());
                     $model['firstName'] = $card->getHolder();
                     $model['lastName'] = $card->getHolderSurname();
                     $model['email'] = $card->getEmail();
@@ -168,10 +169,12 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
             $customersClient
         );
 
+        $cardInfo = $model->toUnsafeArray();
+
         $card = new Card(
-            $model['card_number'],
-            $model['card_expiration_date'],
-            $model['card_cvd']
+            $cardInfo['card_number'],
+            $cardInfo['card_expiration_date'],
+            $cardInfo['card_cvd']
         );
 
         $payment = new Payment(
