@@ -81,108 +81,16 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
         }
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
-        if (
-            $model['paymentStatus'] != 'secure3d' &&
-            $model['paymentStatus'] != 'error' &&
-            $model['paymentStatus'] != 'finished' &&
-            $model['paymentStatus'] != 'success') {
-            if (false == $model['httpUserAgent']) {
-                $this->payment->execute($httpRequest = new GetHttpRequest());
-                $model['httpUserAgent'] = $httpRequest->userAgent;
-            }
 
-            if (false == $model['originIP']) {
-                $this->payment->execute($httpRequest = new GetHttpRequest());
-                $model['originIP'] = $httpRequest->clientIp;
-            }
-
-            if (false == $model['httpAccept']) {
-                $this->payment->execute($httpRequest = new GetHttpRequest());
-                $model['httpAccept'] = $httpRequest->headers['accept'][0];
-            }
-
-            $cardFields = array(
-                'card_number',
-                'card_expiration_date',
-                'card_cvd',
-                'firstName',
-                'lastName',
-                'address',
-                'city',
-                'zipCode',
-                'country',
-                'email',
-                'phoneNumber'
-            );
-            if (false == $model->validateNotEmpty($cardFields, false)) {
-                try {
-                    $creditCardRequest = new ObtainCreditCard();
-                    $prefilledCreditCard = new \Locastic\TcomPaywayPayumBundle\Entity\CreditCard();
-                    $prefilledCreditCard->setHolder($model['firstName']);
-                    $prefilledCreditCard->setHolderSurname($model['lastName']);
-                    $prefilledCreditCard->setNumber("");
-                    $prefilledCreditCard->setExpireAt(new \DateTime());
-                    $prefilledCreditCard->setSecurityCode("");
-                    $prefilledCreditCard->setEmail($model['email']);
-                    $prefilledCreditCard->setAddress($model['address']);
-                    $prefilledCreditCard->setZipCode($model['zipCode']);
-                    $prefilledCreditCard->setCountry($model['country']);
-                    $prefilledCreditCard->setCity($model['city']);
-                    $prefilledCreditCard->setPhoneNumber($model['phoneNumber']);
-                    $creditCardRequest->set($prefilledCreditCard);
-                    $this->payment->execute($creditCardRequest);
-
-                    $card = $creditCardRequest->obtain();
-                    $model['card_expiration_date'] = new SensitiveValue($card->getExpireAt()->format('Y-m-d'));
-                    $model['card_number'] = new SensitiveValue($card->getNumber());
-                    $model['card_cvd'] = new SensitiveValue($card->getSecurityCode());
-                    $model['firstName'] = $card->getHolder();
-                    $model['lastName'] = $card->getHolderSurname();
-                    $model['email'] = $card->getEmail();
-                    $model['address'] = $card->getAddress();
-                    $model['city'] = $card->getCity();
-                    $model['zipCode'] = $card->getZipCode();
-                    $model['country'] = $card->getCountry();
-                    $model['phoneNumber'] = $card->getPhoneNumber();
-                    $model['numOfInstallments'] = 1; // TODO set custom number of installments
-                    $model['paymentMode'] = $this->preauth_required;
-                } catch (RequestNotSupportedException $e) {
-                    throw new LogicException(
-                        'Credit card details has to be set explicitly or there has to be an action that supports ObtainCreditCard request.'
-                    );
-                }
-            }
+        if (!array_key_exists('paymentStatus', $model)) {
+            $model = $this->obtainCreditCard($model);
         }
 
         $shop = new Shop($this->shop_id, $this->shop_username, $this->shop_password, $this->shop_secret_key);
-        $customersClient = new CustomersClient($model['httpAccept'], $model['httpUserAgent'], $model['originIP']);
 
-        $customer = new Customer(
-            $model['firstName'],
-            $model['lastName'],
-            $model['address'],
-            $model['city'],
-            $model['zipCode'],
-            $model['country'],
-            $model['email'],
-            $model['phoneNumber'],
-            $customersClient
-        );
-
-        $cardInfo = $model->toUnsafeArray();
-
-        $card = new Card(
-            $cardInfo['card_number'],
-            $cardInfo['card_expiration_date'],
-            $cardInfo['card_cvd']
-        );
-
-        $payment = new Payment(
-            $model['shoppingCartId'],
-            $model['amount'],
-            $model['numOfInstallments'],
-            $model['paymentMode']
-        );
+        $customer = $this->getCustomer($model);
+        $card = $this->getCard($model);
+        $payment = $this->getPayment($model);
 
         if (is_object($shop) && is_object($customer) && is_object($card) && is_object($payment)) {
             $transaction = new Transaction($shop, $customer, $card, $payment);
@@ -209,8 +117,12 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
 
                 $this->payment->execute($secure3dTmpl);
                 throw new HttpResponse($secure3dTmpl->getResult());
-            } elseif ($response['status'] == 'error') {
+            } else {
                 $model['tcomData'] = $response;
+
+                $model['card_expiration_date'] = new SensitiveValue($card->getExpDate());
+                $model['card_number'] = new SensitiveValue($card->getNumber());
+                $model['card_cvd'] = new SensitiveValue($card->getCvd());
             }
         }
     }
@@ -223,5 +135,114 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
         return
             $request instanceof Capture &&
             $request->getModel() instanceof \ArrayAccess;
+    }
+
+    private function getCustomer(ArrayObject $model)
+    {
+        $customersClient = new CustomersClient($model['httpAccept'], $model['httpUserAgent'], $model['originIP']);
+
+        return new Customer(
+            $model['firstName'],
+            $model['lastName'],
+            $model['address'],
+            $model['city'],
+            $model['zipCode'],
+            $model['country'],
+            $model['email'],
+            $model['phoneNumber'],
+            $customersClient
+        );
+    }
+
+    private function getCard(ArrayObject $model)
+    {
+        return new Card(
+            $model['card_number'],
+            $model['card_expiration_date'],
+            $model['card_cvd']
+        );
+    }
+
+    private function getPayment(ArrayObject $model)
+    {
+        return new Payment(
+            $model['shoppingCartId'],
+            $model['amount'],
+            $model['numOfInstallments'],
+            $model['paymentMode']
+        );
+    }
+
+    private function obtainCreditCard(ArrayObject $model)
+    {
+        if (false == $model['httpUserAgent']) {
+            $this->payment->execute($httpRequest = new GetHttpRequest());
+            $model['httpUserAgent'] = $httpRequest->userAgent;
+        }
+
+        if (false == $model['originIP']) {
+            $this->payment->execute($httpRequest = new GetHttpRequest());
+            $model['originIP'] = $httpRequest->clientIp;
+        }
+
+        if (false == $model['httpAccept']) {
+            $this->payment->execute($httpRequest = new GetHttpRequest());
+            $model['httpAccept'] = $httpRequest->headers['accept'][0];
+        }
+
+        $cardFields = array(
+            'card_number',
+            'card_expiration_date',
+            'card_cvd',
+            'firstName',
+            'lastName',
+            'address',
+            'city',
+            'zipCode',
+            'country',
+            'email',
+            'phoneNumber'
+        );
+
+        if (false == $model->validateNotEmpty($cardFields, false)) {
+            try {
+                $creditCardRequest = new ObtainCreditCard();
+                $prefilledCreditCard = new \Locastic\TcomPaywayPayumBundle\Entity\CreditCard();
+                $prefilledCreditCard->setHolder($model['firstName']);
+                $prefilledCreditCard->setHolderSurname($model['lastName']);
+                $prefilledCreditCard->setNumber("");
+                $prefilledCreditCard->setExpireAt(new \DateTime());
+                $prefilledCreditCard->setSecurityCode("");
+                $prefilledCreditCard->setEmail($model['email']);
+                $prefilledCreditCard->setAddress($model['address']);
+                $prefilledCreditCard->setZipCode($model['zipCode']);
+                $prefilledCreditCard->setCountry($model['country']);
+                $prefilledCreditCard->setCity($model['city']);
+                $prefilledCreditCard->setPhoneNumber($model['phoneNumber']);
+                $creditCardRequest->set($prefilledCreditCard);
+                $this->payment->execute($creditCardRequest);
+
+                $card = $creditCardRequest->obtain();
+                $model['card_expiration_date'] = $card->getExpireAt()->format('Y-m-d');
+                $model['card_number'] = $card->getNumber();
+                $model['card_cvd'] = $card->getSecurityCode();
+                $model['firstName'] = $card->getHolder();
+                $model['lastName'] = $card->getHolderSurname();
+                $model['email'] = $card->getEmail();
+                $model['address'] = $card->getAddress();
+                $model['city'] = $card->getCity();
+                $model['zipCode'] = $card->getZipCode();
+                $model['country'] = $card->getCountry();
+                $model['phoneNumber'] = $card->getPhoneNumber();
+                $model['numOfInstallments'] = 1; // TODO set custom number of installments
+                $model['paymentMode'] = $this->preauth_required;
+            } catch (RequestNotSupportedException $e) {
+                throw new LogicException(
+                    'Credit card details has to be set explicitly or there has to be an action that supports ObtainCreditCard request.'
+                );
+            }
+
+            return $model;
+        }
     }
 }
