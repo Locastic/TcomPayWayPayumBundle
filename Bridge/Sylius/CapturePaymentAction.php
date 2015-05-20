@@ -64,18 +64,18 @@ class CapturePaymentAction extends PaymentAwareAction
 
         $details = array();
 
-        $details['firstName'] = $order->getBillingAddress()->getFirstName();
-        $details['lastName'] = $order->getBillingAddress()->getLastName();
-        $details['address'] = $order->getBillingAddress()->getStreet();
-        $details['city'] = $order->getBillingAddress()->getCity();
-        $details['zipCode'] = $order->getBillingAddress()->getPostCode();
-        $details['country'] = $order->getBillingAddress()->getCountry()->getIsoName();
-        $details['phoneNumber'] = $order->getBillingAddress()->getPhoneNumber();
-        $details['email'] = $order->getUser()->getEmail();
-        $details['amount'] = $order->getTotal();
-        $details['shoppingCartId'] = $this->shopName . ' ' . $order->getNumber() . ' (' . (new \DateTime())->format(
-                'd.m.Y.'
-            ) . ')';
+        if($order->getBillingAddress()) {
+            $details['firstName'] = $order->getBillingAddress()->getFirstName();
+            $details['lastName'] = $order->getBillingAddress()->getLastName();
+            $details['address'] = $order->getBillingAddress()->getStreet();
+            $details['city'] = $order->getBillingAddress()->getCity();
+            $details['zipCode'] = $order->getBillingAddress()->getPostCode();
+            $details['country'] = $order->getBillingAddress()->getCountry()->getIsoName();
+            $details['phoneNumber'] = $order->getBillingAddress()->getPhoneNumber();
+            $details['email'] = $order->getUser()->getEmail();
+            $details['amount'] = $order->getTotal();
+            $details['shoppingCartId'] = $order->getNumber();
+        }
 
         $payment->setDetails($details);
     }
