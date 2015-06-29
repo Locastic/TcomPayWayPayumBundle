@@ -1,6 +1,7 @@
 <?php
 namespace Locastic\TcomPaywayPayumBundle\Controller;
 
+use Locastic\TcomPayWay\Model\Payment;
 use Payum\Core\Request\GetHumanStatus;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;

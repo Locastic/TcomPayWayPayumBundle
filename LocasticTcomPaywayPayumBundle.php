@@ -1,6 +1,6 @@
 <?php
 
-namespace Locastic\TcomPaywayPayumBundle;
+namespace Locastic\TcomPayWayPayumBundle;
 
 use Locastic\TcomPaywayPayumBundle\DependencyInjection\Factory\Payment\TcomOffsitePaymentFactory;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
