@@ -16,21 +16,21 @@ class Prepare
         $this->tokenFactory = $tokenFactory;
     }
 
-    public function prepare($amount, $cartName = "Locastic-")
+    public function prepareAuthorizeForm($amount, $cartName = "Locastic-")
     {
-        $paymentName = 'tcompayway';
+        $paymentName = 'tcompayway_offsite';
         $storage = $this->payum->getStorage('Locastic\TcomPaywayPayumBundle\Entity\PaymentDetails');
 
         /** @var $paymentDetails PaymentDetails */
-        $paymentDetails = $storage->createModel();
+        $paymentDetails = $storage->create();
         $paymentDetails['amount'] = $amount;
-        $storage->updateModel($paymentDetails);
+        $storage->update($paymentDetails);
         $paymentDetails['shoppingCartId'] = $cartName . $paymentDetails->getId();
 
         $captureToken = $this->tokenFactory->createCaptureToken(
             $paymentName,
             $paymentDetails,
-            'locastic_tcompaywaypayum_capture_done'
+            'locastic_tcompaywaypayum_authorize_form_capture_done'
         );
 
         return $captureToken->getTargetUrl();

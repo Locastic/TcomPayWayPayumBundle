@@ -7,7 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Payum\Core\Registry\RegistryInterface;
 use Payum\Core\Security\GenericTokenFactoryInterface;
 
-class PaymentController extends Controller
+class AuthorizeDirectController extends Controller
 {
     public function prepareAction()
     {

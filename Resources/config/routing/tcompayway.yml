@@ -1,9 +1,22 @@
-locastic_tcompaywaypayum_prepare:
-    pattern: /prepare
+# form method example
+locastic_tcompaywaypayum_authoriz_form_prepare:
+    pattern: /prepare-form
     defaults:
-        _controller: LocasticTcomPaywayPayumBundle:Payment:prepare
+        _controller: LocasticTcomPaywayPayumBundle:AuthorizeForm:prepare
 
-locastic_tcompaywaypayum_capture_done:
-    pattern: /done
+locastic_tcompaywaypayum_authorize_form_capture_done:
+    pattern: /done-form
     defaults:
-        _controller: LocasticTcomPaywayPayumBundle:Payment:captureDone
+        _controller: LocasticTcomPaywayPayumBundle:AuthorizeForm:captureDone
+
+
+# direct method example
+locastic_tcompaywaypayum_authorize_direct_prepare:
+    pattern: /prepare-direct
+    defaults:
+        _controller: LocasticTcomPaywayPayumBundle:AuthorizeDirect:prepare
+
+locastic_tcompaywaypayum_direct_authorize_capture_done:
+    pattern: /done-direct
+    defaults:
+        _controller: LocasticTcomPaywayPayumBundle:AuthorizeDirect:captureDone
