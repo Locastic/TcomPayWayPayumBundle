@@ -1,5 +1,5 @@
 <?php
-namespace Locastic\TcomPaywayPayumBundle\Controller;
+namespace Locastic\TcomPayWayPayumBundle\Controller;
 
 use Locastic\TcomPayWay\Model\Payment;
 use Payum\Core\Request\GetHumanStatus;

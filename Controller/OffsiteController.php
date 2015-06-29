@@ -1,18 +1,31 @@
 <?php
 
-namespace Locastic\TcomPaywayPayumBundle\Controller;
+namespace Locastic\TcomPayWayPayumBundle\Controller;
 
+use Locastic\TcomPayWay\AuthorizeForm\Model\Payment;
 use Payum\Core\Request\GetHumanStatus;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 
-class AuthorizeFormController extends Controller
+class OffsiteController extends Controller
 {
     public function prepareAction()
     {
-        $paymentName = 'offline';
+        $model = new Payment(20000445, 'bHVG5tR$edS3w', uniqid(), 100, 0, 'http://www.locastic.com', 'http://www.locastic.com');
+
+        return $this->render('LocasticTcomPayWayPayumBundle:TcomPayWay:prepareAuthorizationForm.html.twig', array('model' => $model));
+
+
+
+
+
+
+
+
+
+        $paymentName = 'tcompayway_offline';
 
         $storage = $this->get('payum')->getStorage('Locastic\TcomPayWayPayumBundle\Entity\Payment');
 
@@ -23,13 +36,14 @@ class AuthorizeFormController extends Controller
         $payment->setDescription('A description');
         $payment->setClientId('anId');
         $payment->setClientEmail('foo@example.com');
+        $payment->setMaet('gfd');
 
         $storage->update($payment);
 
         $captureToken = $this->get('payum.security.token_factory')->createCaptureToken(
             $paymentName,
             $payment,
-            'locastic_tcompaywaypayum_authorize_form_capture_done' // the route to redirect after capture
+            'locastic_tcompaywaypayum_offsite_capture_done' // the route to redirect after capture
         );
 
         return $this->redirect($captureToken->getTargetUrl());

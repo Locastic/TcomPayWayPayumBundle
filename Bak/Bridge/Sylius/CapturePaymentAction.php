@@ -1,5 +1,5 @@
 <?php
-namespace Locastic\TcomPaywayPayumBundle\Bridge\Sylius;
+namespace Locastic\TcomPayWayPayumBundle\Bridge\Sylius;
 
 use Payum\Core\Action\PaymentAwareAction;
 use Payum\Core\Bridge\Spl\ArrayObject;

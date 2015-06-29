@@ -1,6 +1,6 @@
 <?php
 
-namespace Locastic\TcomPaywayPayumBundle\Bridge\Symfony;
+namespace Locastic\TcomPayWayPayumBundle\Bridge\Symfony;
 
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\AbstractPaymentFactory;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
@@ -23,7 +23,7 @@ class TcomPayWayPaymentFactory extends AbstractPaymentFactory
         array $config
     ) {
         $captureAction = new Definition;
-        $captureAction->setClass('Locastic\TcomPaywayPayumBundle\Action\CaptureAction');
+        $captureAction->setClass('Locastic\TcomPayWayPayumBundle\Action\CaptureAction');
         $captureAction->setPublic(false);
         $captureAction->setArguments(array(
             'shop_id' => $container->getParameter('tcompayway.shop_id'),
@@ -42,7 +42,7 @@ class TcomPayWayPaymentFactory extends AbstractPaymentFactory
         $container->setDefinition('locastic.tcompayway_payum.action.capture', $captureAction);
 
         $statusAction = new Definition;
-        $statusAction->setClass('Locastic\TcomPaywayPayumBundle\Action\StatusAction');
+        $statusAction->setClass('Locastic\TcomPayWayPayumBundle\Action\StatusAction');
         $statusAction->setPublic(false);
         $statusAction->addTag(
             'payum.action',
@@ -100,13 +100,13 @@ class TcomPayWayPaymentFactory extends AbstractPaymentFactory
                         ->defaultValue('https://pgw.t-com.hr/MerchantPayment/PaymentWS.asmx')
                     ->end()
                     ->scalarNode('done_template')
-                        ->defaultValue('LocasticTcomPaywayPayumBundle:TcomPayWay:done.html.twig')
+                        ->defaultValue('LocasticTcomPayWayPayumBundle:TcomPayWay:done.html.twig')
                     ->end()
                     ->scalarNode('prepare_template')
-                        ->defaultValue('LocasticTcomPaywayPayumBundle:TcomPayWay:prepare.html.twig')
+                        ->defaultValue('LocasticTcomPayWayPayumBundle:TcomPayWay:prepare.html.twig')
                     ->end()
                     ->scalarNode('secure3d_template')
-                        ->defaultValue('LocasticTcomPaywayPayumBundle:TcomPayWay:secure3d.html.twig')
+                        ->defaultValue('LocasticTcomPayWayPayumBundle:TcomPayWay:secure3d.html.twig')
                     ->end()
                 ->end()
             ->end();

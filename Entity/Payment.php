@@ -3,7 +3,7 @@
 namespace Locastic\TcomPayWayPayumBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Payum\Core\Model\Payment as BasePayment;
+use Payum\Core\Model\Order as BasePayment;
 
 /**
  * @ORM\Table

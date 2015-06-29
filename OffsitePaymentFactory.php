@@ -1,22 +1,21 @@
 <?php
 
-namespace Locastic\TcomPaywayPayumBundle;
+namespace Locastic\TcomPayWayPayumBundle;
 
 use Locastic\TcomPayWay\AuthorizeForm\Model\Payment as PaymentOffsite;
-use Locastic\TcomPaywayPayumBundle\Action\CaptureOffsiteAction;
-use Locastic\TcomPaywayPayumBundle\Action\StatusAction;
+use Locastic\TcomPayWayPayumBundle\Action\CaptureOffsiteAction;
+use Locastic\TcomPayWayPayumBundle\Action\FillOrderDetailsAction;
+use Locastic\TcomPayWayPayumBundle\Action\StatusAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\PaymentFactoryInterface;
-use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Payum\Core\PaymentFactory as CorePaymentFactory;
 
-class TcomOffsitePaymentFactory implements PaymentFactoryInterface
+class OffsitePaymentFactory implements PaymentFactoryInterface
 {
     /**
      * @var PaymentFactoryInterface
      */
-    protected $corePayementFactory;
+    protected $corePaymentFactory;
 
     /**
      * @var array
@@ -25,11 +24,11 @@ class TcomOffsitePaymentFactory implements PaymentFactoryInterface
 
     /**
      * @param array $defaultConfig
-     * @param PaymentFactoryInterface $corePayementFactory
+     * @param PaymentFactoryInterface $corePaymentFactory
      */
-    public function __construct(array $defaultConfig = array(), PaymentFactoryInterface $corePayementFactory = null)
+    public function __construct(array $defaultConfig = array(), PaymentFactoryInterface $corePaymentFactory = null)
     {
-        $this->corePayementFactory = $corePayementFactory ?: new CorePaymentFactory();
+        $this->corePaymentFactory = $corePaymentFactory ?: new CorePaymentFactory();
         $this->defaultConfig = $defaultConfig;
     }
 
@@ -48,6 +47,7 @@ class TcomOffsitePaymentFactory implements PaymentFactoryInterface
                 'payum.factory_title' => 'TcomPayWay Offsite',
                 'payum.action.capture' => new CaptureOffsiteAction(),
                 'payum.action.status' => new StatusAction(),
+                'payum.action.fill_order_details' => new FillOrderDetailsAction(),
             )
         );
 
@@ -86,6 +86,6 @@ class TcomOffsitePaymentFactory implements PaymentFactoryInterface
      */
     public function create(array $config = array())
     {
-        return $this->corePayementFactory->create($this->createConfig($config));
+        return $this->corePaymentFactory->create($this->createConfig($config));
     }
 }

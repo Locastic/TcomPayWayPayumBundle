@@ -1,6 +1,6 @@
 <?php
 
-namespace Locastic\TcomPaywayPayumBundle\DependencyInjection\Factory\Payment;
+namespace Locastic\TcomPayWayPayumBundle\DependencyInjection\Factory\Payment;
 
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\AbstractPaymentFactory;
@@ -13,7 +13,7 @@ class TcomOffsitePaymentFactory extends AbstractPaymentFactory
     public function addConfiguration(ArrayNodeDefinition $builder)
     {
         parent::addConfiguration($builder);
-        
+
         $builder->children()
             ->scalarNode('shop_id')->isRequired()->cannotBeEmpty()->end()
             ->scalarNode('secret_key')->isRequired()->cannotBeEmpty()->end()
@@ -26,7 +26,7 @@ class TcomOffsitePaymentFactory extends AbstractPaymentFactory
      */
     public function getName()
     {
-        return 'tcompayway_offsite';
+        return 'tcompayway_offline';
     }
 
     /**
@@ -34,7 +34,7 @@ class TcomOffsitePaymentFactory extends AbstractPaymentFactory
      */
     protected function getPayumPaymentFactoryClass()
     {
-        return 'Locastic\TcomPayWayPayumBundle\TcomOffsitePaymentFactory';
+        return 'Locastic\TcomPayWayPayumBundle\OffsitePaymentFactory';
     }
 
     /**

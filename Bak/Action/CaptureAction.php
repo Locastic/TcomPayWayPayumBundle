@@ -1,6 +1,6 @@
 <?php
 
-namespace Locastic\TcomPaywayPayumBundle\Action;
+namespace Locastic\TcomPayWayPayumBundle\Action;
 
 use Locastic\TcomPayWay\Handlers\TcomPayWayPaymentProcessHandler;
 use Locastic\TcomPayWay\Model\Card;
@@ -207,7 +207,7 @@ class CaptureAction extends PaymentAwareAction implements ApiAwareInterface
         if (false == $model->validateNotEmpty($cardFields, false)) {
             try {
                 $creditCardRequest = new ObtainCreditCard();
-                $prefilledCreditCard = new \Locastic\TcomPaywayPayumBundle\Entity\CreditCard();
+                $prefilledCreditCard = new \Locastic\TcomPayWayPayumBundle\Entity\CreditCard();
                 $prefilledCreditCard->setHolder($model['firstName']);
                 $prefilledCreditCard->setHolderSurname($model['lastName']);
                 $prefilledCreditCard->setNumber("");

@@ -1,6 +1,6 @@
 <?php
 
-namespace Locastic\TcomPaywayPayumBundle\Entity;
+namespace Locastic\TcomPayWayPayumBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Payum\Core\Model\ArrayObject;

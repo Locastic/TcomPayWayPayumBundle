@@ -1,6 +1,6 @@
 <?php
 
-namespace Locastic\TcomPaywayPayumBundle\Action;
+namespace Locastic\TcomPayWayPayumBundle\Action;
 
 use Locastic\TcomPayWay\AuthorizeForm\Model\Payment as Api;
 use Payum\Core\Action\PaymentAwareAction;
@@ -24,7 +24,6 @@ class CaptureOffsiteAction extends PaymentAwareAction implements ApiAwareInterfa
      */
     public function setApi($api)
     {
-        die('ode smo');
         if (false === $api instanceof Api) {
             throw new UnsupportedApiException('Not supported.');
         }
@@ -39,13 +38,19 @@ class CaptureOffsiteAction extends PaymentAwareAction implements ApiAwareInterfa
      */
     public function execute($request)
     {
-        die('peka');
         RequestNotSupportedException::assertSupports($this, $request);
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
+
+        var_dump($this->api);
+
+
         $httpRequest = new GetHttpRequest();
-        $this->gateway->execute($httpRequest);
+        $this->payment->execute($httpRequest);
+
+
+
         //we are back from be2bill site so we have to just update model.
         if (isset($httpRequest->query['EXECCODE'])) {
             $model->replace($httpRequest->query);

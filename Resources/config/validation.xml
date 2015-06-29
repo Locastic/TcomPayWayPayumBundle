@@ -5,7 +5,7 @@
                     xsi:schemaLocation="http://symfony.com/schema/dic/constraint-mapping
                                         http://symfony.com/schema/dic/services/constraint-mapping-1.0.xsd">
 
-    <class name="Locastic\TcomPaywayPayumBundle\Entity\CreditCard">
+    <class name="Locastic\TcomPayWayPayumBundle\Entity\CreditCard">
         <property name="number">
             <constraint name="NotBlank">
                 <option name="groups">Locastic</option>

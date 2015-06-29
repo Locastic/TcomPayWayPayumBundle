@@ -1,21 +1,17 @@
 <form id="payway-authorize-form" name="payway-authorize-form" method="post"
       action="https://pgw.ht.hr/services/payment/api/authorize-form">
-    <input type="hidden" name="pgw_shop_id" value="123"/> <input type="hidden" name="pgw_order_id" value="narudžba456"/>
-    <input type="hidden" name="pgw_amount" value="789"/> <input type="hidden" name="pgw_authorization_type" value="0"/>
-    <input type="hidden" name="pgw_language" value=""/> <input type="hidden" name="pgw_success_url"
-                                                               value="http://www.mojducan.com/success/narudžba456"/>
-    <input type="hidden" name="pgw_success_url" value="http://www.mojducan.com/failure/narudžba456"/> <input
+    <input type="hidden" name="pgw_shop_id" value="{{ model.pgwShopId }}"/>
+    <input type="hidden" name="pgw_order_id"
+                                                                                   value="{{ model.pgwOrderId }}"/>
+    <input type="hidden" name="pgw_amount" value="{{ model.pgwAmount }}"/>
+    <input type="hidden"
+                                                                                  name="pgw_authorization_type"
+                                                                                  value="{{ model.pgwAuthorizationType }}"/>
+    <input type="hidden" name="pgw_language" value="{{ model.pgwLanguage }}"/>
+    <input type="hidden" name="pgw_success_url"
+           value="{{ model.pgwSuccessUrl }}"/>
+    <input type="hidden" name="pgw_failure_url" value="{{ model.pgwFailureUrl }}"/> <input
             type="hidden" name="pgw_signature"
-            value="8295bfece351e248e73870ad10ffb9dc63abd807582e5fdd4348d12284f6b8cc13e93eaa502034c1cb4114ddc84f19868d4ebfff55682e0c521a96a5022974cb"/>
+            value="{{ model.pgwSignature }}"/>
     <button type="submit">Posalji</button>
 </form>
-
-<form action="" method="post">
-{{ form_row(form.transaction_number) }}
-{{ form_row(form.transaction_date) }}
-{{ form_row(form.description) }}
-{{ form_row(form.paid) }}
-{{ form_rest(form) }}
-
-    <button type="submit">posalji</button>
-    </form>

@@ -1,5 +1,5 @@
 <?php
-namespace Locastic\TcomPaywayPayumBundle\Entity;
+namespace Locastic\TcomPayWayPayumBundle\Entity;
 
 use Payum\Core\Model\CreditCard as BaseCreditCard;
 

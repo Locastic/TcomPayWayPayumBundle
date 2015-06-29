@@ -2,13 +2,13 @@
 
 namespace Locastic\TcomPayWayPayumBundle;
 
-use Locastic\TcomPaywayPayumBundle\DependencyInjection\Factory\Payment\TcomOffsitePaymentFactory;
+use Locastic\TcomPayWayPayumBundle\DependencyInjection\Factory\Payment\TcomOffsitePaymentFactory;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Payum\Bundle\PayumBundle\DependencyInjection\PayumExtension;
 
 
-class LocasticTcomPaywayPayumBundle extends Bundle
+class LocasticTcomPayWayPayumBundle extends Bundle
 {
     public function build(ContainerBuilder $container)
     {

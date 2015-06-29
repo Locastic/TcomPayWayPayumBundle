@@ -1,6 +1,6 @@
 <?php
 
-namespace Locastic\TcomPaywayPayumBundle\Form\Type;
+namespace Locastic\TcomPayWayPayumBundle\Form\Type;
 
 use Payum\Core\Bridge\Symfony\Form\Type\CreditCardType as CreditCardTypeBase;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -40,7 +40,7 @@ class CreditCardType extends CreditCardTypeBase
         $resolver
             ->setDefaults(
                 array(
-                    'data_class' => 'Locastic\TcomPaywayPayumBundle\Entity\CreditCard',
+                    'data_class' => 'Locastic\TcomPayWayPayumBundle\Entity\CreditCard',
                     'validation_groups' => array('Locastic'),
                 )
             );

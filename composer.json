@@ -1,7 +1,7 @@
 {
     "name": "locastic/tcompayway-payum-bundle",
     "type": "library",
-    "description": "Symfony2 Integration for TcomPayway with Payum",
+    "description": "Symfony2 Integration for TcomPayWay with Payum",
     "keyword": [
         "tcompayway",
         "tcom",
@@ -27,10 +27,6 @@
         {
             "name": "Antonio Perić",
             "email": "antonio@locastic.com"
-        },
-        {
-            "name": "Kruno Knego",
-            "email": "kruno@locastic.com"
         }
     ],
     "require": {
@@ -46,7 +42,7 @@
         "bin-dir": "bin"
     },
     "autoload": {
-        "psr-0": {"Locastic\\TcomPaywayPayumBundle": ""}
+        "psr-0": {"Locastic\\TcomPayWayPayumBundle": ""}
     },
-    "target-dir": "Locastic/TcomPaywayPayumBundle"
+    "target-dir": "Locastic/TcomPayWayPayumBundle"
 }
