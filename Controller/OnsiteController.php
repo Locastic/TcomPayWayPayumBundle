@@ -9,11 +9,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 
-class OffsiteController extends Controller
+class OnsiteController extends Controller
 {
     public function prepareAction()
     {
-        $paymentName = 'tcompayway_offsite';
+        $paymentName = 'tcompayway_onsite';
 
         $storage = $this->get('payum')->getStorage('Locastic\TcomPayWayPayumBundle\Entity\Payment');
 
@@ -30,7 +30,7 @@ class OffsiteController extends Controller
         $captureToken = $this->get('payum.security.token_factory')->createCaptureToken(
             $paymentName,
             $payment,
-            'locastic_tcompaywaypayum_offsite_capture_done' // the route to redirect after capture
+            'locastic_tcompaywaypayum_onsite_capture_done' // the route to redirect after capture
         );
 
         return $this->redirect($captureToken->getTargetUrl());

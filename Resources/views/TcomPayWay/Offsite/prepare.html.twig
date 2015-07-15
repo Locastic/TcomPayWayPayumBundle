@@ -1,0 +1,12 @@
+<form id="payway-authorize-form" name="payway-authorize-form" method="post"
+      action="{{ payment.apiEndPoint }}">
+    <input type="hidden" name="pgw_shop_id" value="{{ payment.pgwShopId }}"/>
+    <input type="hidden" name="pgw_order_id" value="{{ payment.pgwOrderId }}"/>
+    <input type="hidden" name="pgw_amount" value="{{ payment.pgwAmount }}"/>
+    <input type="hidden" name="pgw_authorization_type" value="{{ payment.pgwAuthorizationType }}"/>
+    <input type="hidden" name="pgw_language" value="{{ payment.pgwLanguage }}"/>
+    <input type="hidden" name="pgw_success_url" value="{{ payment.pgwSuccessUrl }}"/>
+    <input type="hidden" name=" pgw_failure_url" value="{{ payment.pgwFailureUrl }}"/>
+    <input type="hidden" name="pgw_signature" value="{{ payment.pgwSignature }}"/>
+</form>
+{#<script> document.forms["payway-authorize-form"].submit(); </script>#}

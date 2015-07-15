@@ -1,0 +1,35 @@
+locastic_tcompaywaypayum_api_authorize_announce:
+    pattern: /authorize-announce
+    methods: [POST]
+    defaults:
+        _controller: LocasticTcomPayWayPayumBundle:Api/PayWay:authorizationAnnounce
+
+locastic_tcompaywaypayum_api_authorize_complete:
+    pattern: /authorize-complete
+    methods: [POST]
+    defaults:
+        _controller: LocasticTcomPayWayPayumBundle:Api/PayWay:authorizationComplete
+
+locastic_tcompaywaypayum_api_authorize_cancel:
+    pattern: /authorize-cancel
+    methods: [POST]
+    defaults:
+        _controller: LocasticTcomPayWayPayumBundle:Api/PayWay:authorizationCancel
+
+locastic_tcompaywaypayum_api_authorize_refund:
+    pattern: /authorize-refund
+    methods: [POST]
+    defaults:
+        _controller: LocasticTcomPayWayPayumBundle:Api/PayWay:authorizationRefund
+
+locastic_tcompaywaypayum_api_authorize_info:
+    pattern: /authorize-info
+    methods: [POST]
+    defaults:
+        _controller: LocasticTcomPayWayPayumBundle:Api/PayWay:authorizationInfo
+
+locastic_tcompaywaypayum_api_installments:
+    pattern: /installments
+    methods: [POST]
+    defaults:
+        _controller: LocasticTcomPayWayPayumBundle:Api/Payway:installments

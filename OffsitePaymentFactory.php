@@ -9,6 +9,7 @@ use Locastic\TcomPayWayPayumBundle\Action\StatusAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\PaymentFactoryInterface;
 use Payum\Core\PaymentFactory as CorePaymentFactory;
+use Symfony\Component\Form\FormBuilder;
 
 class OffsitePaymentFactory implements PaymentFactoryInterface
 {
@@ -20,7 +21,7 @@ class OffsitePaymentFactory implements PaymentFactoryInterface
     /**
      * @var array
      */
-    private $defaultConfig;
+    protected $defaultConfig;
 
     /**
      * @param array $defaultConfig
@@ -55,7 +56,8 @@ class OffsitePaymentFactory implements PaymentFactoryInterface
             $config['payum.default_options'] = array(
                 'shop_id' => '',
                 'secret_key' => '',
-                'authorization_type' => ''
+                'authorization_type' => '0',
+                'test_mode' => true,
             );
             $config->defaults($config['payum.default_options']);
             $config['payum.required_options'] = array(
@@ -64,6 +66,7 @@ class OffsitePaymentFactory implements PaymentFactoryInterface
             );
             $config['payum.api'] = function (ArrayObject $config) {
                 $config->validateNotEmpty($config['payum.required_options']);
+
                 $api = new PaymentOffsite(
                     $config['shop_id'],
                     $config['secret_key'],

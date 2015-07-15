@@ -17,8 +17,9 @@ class TcomOffsitePaymentFactory extends AbstractPaymentFactory
         $builder->children()
             ->scalarNode('shop_id')->isRequired()->cannotBeEmpty()->end()
             ->scalarNode('secret_key')->isRequired()->cannotBeEmpty()->end()
-            ->booleanNode('authorization_type')->defaultTrue()->end()
-        ->end();
+            ->scalarNode('authorization_type')->defaultValue(0)->end()
+            ->booleanNode('test_mode')->defaultTrue()->end()
+            ->end();
     }
 
     /**
@@ -26,7 +27,7 @@ class TcomOffsitePaymentFactory extends AbstractPaymentFactory
      */
     public function getName()
     {
-        return 'tcompayway_offline';
+        return 'tcompayway_offsite';
     }
 
     /**

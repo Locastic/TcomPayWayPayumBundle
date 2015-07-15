@@ -1,9 +1,0 @@
-locastic_tcompaywaypayum_prepare:
-    pattern: /prepare
-    defaults:
-        _controller: LocasticTcomPayWayPayumBundle:Payment:prepare
-
-locastic_tcompaywaypayum_capture_done:
-    pattern: /done
-    defaults:
-        _controller: LocasticTcomPayWayPayumBundle:Payment:captureDone

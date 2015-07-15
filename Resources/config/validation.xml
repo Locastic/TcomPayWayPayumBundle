@@ -14,14 +14,6 @@
                 <option name="groups">Locastic</option>
             </constraint>
         </property>
-        <property name="expireAt">
-            <constraint name="NotBlank">
-                <option name="groups">Locastic</option>
-            </constraint>
-            <constraint name="DateTime">
-                <option name="groups">Locastic</option>
-            </constraint>
-        </property>
         <property name="holder">
             <constraint name="NotBlank">
                 <option name="groups">Locastic</option>
@@ -31,12 +23,70 @@
                 <option name="groups">Locastic</option>
             </constraint>
         </property>
-        <property name="holderSurname">
+        <property name="securityCode">
+            <constraint name="NotBlank">
+                <option name="groups">Locastic</option>
+            </constraint>
+            <constraint name="Length">
+                <option name="min">3</option>
+                <option name="max">4</option>
+                <option name="groups">Locastic</option>
+            </constraint>
+        </property>
+        <property name="expireAt">
+            <constraint name="NotBlank">
+                <option name="groups">Locastic</option>
+            </constraint>
+            <constraint name="DateTime">
+                <option name="groups">Locastic</option>
+            </constraint>
+        </property>
+        <property name="lastName">
             <constraint name="NotBlank">
                 <option name="groups">Locastic</option>
             </constraint>
             <constraint name="Length">
                 <option name="min">2</option>
+                <option name="groups">Locastic</option>
+            </constraint>
+        </property>
+        <property name="street">
+            <constraint name="NotBlank">
+                <option name="groups">Locastic</option>
+            </constraint>
+            <constraint name="Length">
+                <option name="min">2</option>
+                <option name="groups">Locastic</option>
+            </constraint>
+        </property>
+        <property name="city">
+            <constraint name="NotBlank">
+                <option name="groups">Locastic</option>
+            </constraint>
+            <constraint name="Length">
+                <option name="min">2</option>
+                <option name="groups">Locastic</option>
+            </constraint>
+        </property>
+        <property name="postCode">
+            <constraint name="NotBlank">
+                <option name="groups">Locastic</option>
+            </constraint>
+            <constraint name="Length">
+                <option name="min">2</option>
+                <option name="groups">Locastic</option>
+            </constraint>
+        </property>
+        <property name="country">
+            <constraint name="NotBlank">
+                <option name="groups">Locastic</option>
+            </constraint>
+        </property>
+        <property name="email">
+            <constraint name="NotBlank">
+                <option name="groups">Locastic</option>
+            </constraint>
+            <constraint name="Email">
                 <option name="groups">Locastic</option>
             </constraint>
         </property>

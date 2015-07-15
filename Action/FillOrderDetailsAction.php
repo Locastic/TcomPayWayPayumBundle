@@ -19,11 +19,9 @@ class FillOrderDetailsAction implements ActionInterface
         $order = $request->getOrder();
 
         $details = $order->getDetails();
-        $details['ORDERID'] = $order->getNumber();
-        $details['DESCRIPTION'] = $order->getDescription();
-        $details['AMOUNT'] = $order->getTotalAmount();
-        $details['CLIENTIDENT'] = $order->getClientId();
-        $details['CLIENTEMAIL'] = $order->getClientEmail();
+        $details['pgwOrderId'] = $order->getNumber();
+        $details['pgwAmount'] = $order->getTotalAmount();
+        $details['pgwEmail'] = $order->getClientEmail();
 
         $order->setDetails($details);
     }

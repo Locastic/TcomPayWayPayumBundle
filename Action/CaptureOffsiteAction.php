@@ -8,9 +8,12 @@ use Payum\Core\ApiAwareInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Exception\UnsupportedApiException;
+use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Reply\HttpPostRedirect;
+use Payum\Core\Request\RenderTemplate;
+use Symfony\Component\Form\FormBuilder;
 
 class CaptureOffsiteAction extends PaymentAwareAction implements ApiAwareInterface
 {
@@ -18,6 +21,8 @@ class CaptureOffsiteAction extends PaymentAwareAction implements ApiAwareInterfa
      * @var Api
      */
     protected $api;
+
+    protected $templateName = 'LocasticTcomPayWayPayumBundle:TcomPayWay/Offsite:prepare.html.twig';
 
     /**
      * {@inheritDoc}
@@ -42,24 +47,25 @@ class CaptureOffsiteAction extends PaymentAwareAction implements ApiAwareInterfa
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-
-        var_dump($this->api);
-
-
-        $httpRequest = new GetHttpRequest();
-        $this->payment->execute($httpRequest);
-
-
-
-        //we are back from be2bill site so we have to just update model.
-        if (isset($httpRequest->query['EXECCODE'])) {
-            $model->replace($httpRequest->query);
+        if ($model['pgw_trace_ref']) {
+            // tcom return
         } else {
-            throw new HttpPostRedirect(
-                $this->api->getOffsiteUrl(),
-                $this->api->prepareOffsitePayment($model->toUnsafeArray())
+
+            $this->api->setPgwAmount(500);
+            $this->api->setPgwOrderId('nardužba123');
+            $this->api->setPgwSuccessUrl($request->getToken()->getAfterUrl());
+            $this->api->setPgwFailureUrl($request->getToken()->getAfterUrl());
+
+            $renderTemplate = new RenderTemplate(
+                $this->templateName, array(
+                'payment' => $this->api,
+            )
             );
+            $this->payment->execute($renderTemplate);
+
+            throw new HttpResponse($renderTemplate->getResult());
         }
+
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace Locastic\TcomPayWayPayumBundle;
 
 use Locastic\TcomPayWayPayumBundle\DependencyInjection\Factory\Payment\TcomOffsitePaymentFactory;
+use Locastic\TcomPayWayPayumBundle\DependencyInjection\Factory\Payment\TcomOnsitePaymentFactory;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Payum\Bundle\PayumBundle\DependencyInjection\PayumExtension;
@@ -18,5 +19,6 @@ class LocasticTcomPayWayPayumBundle extends Bundle
         $extension = $container->getExtension('payum');
 
         $extension->addPaymentFactory(new TcomOffsitePaymentFactory());
+        $extension->addPaymentFactory(new TcomOnsitePaymentFactory());
     }
 }

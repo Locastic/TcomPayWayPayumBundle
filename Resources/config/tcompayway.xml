@@ -1,0 +1,41 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="locastic.tcompayway.payum.form.type.credit_card.class">Locastic\TcomPayWayPayumBundle\Form\Type\CreditCardType</parameter>
+        <parameter key="locastic.tcompayway.payum.action.obtain_credit_card.class">Locastic\TcomPayWayPayumBundle\Action\ObtainCreditCardAction</parameter>
+        <parameter key="locastic.tcompayway.api.class">Locastic\TcomPayWay\AuthorizeDirect\Api</parameter>
+    </parameters>
+
+    <services>
+        <service id="locastic.tcompayway.payum.form.type.credit_card" class="%locastic.tcompayway.payum.form.type.credit_card.class%">
+            <tag name="form.type" alias="tcompayway_payum_credit_card"/>
+        </service>
+
+        <service id="locastic.tcompayway.payum.action.obtain_credit_card" class="%locastic.tcompayway.payum.action.obtain_credit_card.class%">
+            <argument type="service" id="form.factory"/>
+            <argument>%payum.tcompayway_onsite.obtain_credit_card%</argument>
+            <call method="setRequest">
+                <argument type="service" id="request" on-invalid="null" strict="false"/>
+            </call>
+
+            <tag name="payum.action" alias="obtain_credit_card" factory="tcompayway_onsite"/>
+        </service>
+
+        <service id="locastic.tcompayway.api" class="%locastic.tcompayway.api.class%">
+            <argument>%tcompayway.username%</argument>
+            <argument>%tcompayway.password%</argument>
+            <argument>%tcompayway.shop_id%</argument>
+            <argument>%tcompayway.secret_key%</argument>
+            <argument>%tcompayway.authorization_type%</argument>
+            <argument>%tcompayway.sandbox%</argument>
+        </service>
+
+
+    </services>
+
+
+</container>
