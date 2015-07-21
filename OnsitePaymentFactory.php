@@ -7,7 +7,7 @@ use Locastic\TcomPayWayPayumBundle\Action\CaptureOnsiteAction;
 use Locastic\TcomPayWayPayumBundle\Action\FillOrderDetailsAction;
 use Locastic\TcomPayWayPayumBundle\Action\StatusAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\Bridge\Symfony\Action\ObtainCreditCardAction;
+use Payum\Core\Bridge\Twig\TwigFactory;
 use Payum\Core\PaymentFactoryInterface;
 use Payum\Core\PaymentFactory as CorePaymentFactory;
 

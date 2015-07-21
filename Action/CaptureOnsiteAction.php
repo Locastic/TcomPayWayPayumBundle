@@ -16,7 +16,7 @@ use Payum\Core\Request\Capture;
 use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Reply\HttpPostRedirect;
 use Payum\Core\Exception\LogicException;
-use Payum\Core\Request\ObtainCreditCard;
+use Locastic\TcomPayWayPayumBundle\Request\ObtainCreditCard;
 use Payum\Core\Request\RenderTemplate;
 use Payum\Core\Security\SensitiveValue;
 
@@ -58,16 +58,20 @@ class CaptureOnsiteAction extends PaymentAwareAction implements ApiAwareInterfac
 
         //we are back from tcomapway site so we have to just update model and complete action
         if (isset($httpRequest->request['pgw_trace_ref'])) {
-            $creditCardErrors = array(1006, 1100, 1101, 1102);
+            $creditCardErrors = array(1006, 1100, 1101, 1102, 1400, 1401, 1402, 1403, 1404, 1405, 1406, 1407);
 
-            if (in_array($httpRequest->request['pgw_result_code'], $creditCardErrors)) {
-                $httpCardError = ResponseCodeInterpreter::getPgwResultCode($httpRequest->request['pgw_result_code']);
-
-            } else {
+            // payment is completed with success or failed (but not with credit card errors)
+            if (false == isset($httpRequest->request['pgw_result_code']) || !in_array(
+                    $httpRequest->request['pgw_result_code'],
+                    $creditCardErrors
+                )
+            ) {
                 $model['tcompayway_response'] = $this->checkandUpdateReponse($httpRequest->request);
 
                 return;
             }
+            // save credit card error and show again obtain card form
+            $model['pgwCreditCardError'] = $httpRequest->request['pgw_result_code'];
         }
 
         // required fields for tcompayway
@@ -86,8 +90,9 @@ class CaptureOnsiteAction extends PaymentAwareAction implements ApiAwareInterfac
 
         if (false == $model->validateNotEmpty($cardFields, false) && false == $model['ALIAS']) {
             try {
-
-                $this->payment->execute($creditCardRequest = new ObtainCreditCard());
+                $creditCardRequest = new ObtainCreditCard();
+                $creditCardRequest->setModel($model);
+                $this->payment->execute($creditCardRequest);
                 /** @var CreditCard $card */
                 $card = $creditCardRequest->obtain();
 

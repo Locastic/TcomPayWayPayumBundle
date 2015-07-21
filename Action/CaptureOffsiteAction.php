@@ -58,8 +58,8 @@ class CaptureOffsiteAction extends PaymentAwareAction implements ApiAwareInterfa
 
             $renderTemplate = new RenderTemplate(
                 $this->templateName, array(
-                'payment' => $this->api,
-            )
+                    'payment' => $this->api,
+                )
             );
             $this->payment->execute($renderTemplate);
 

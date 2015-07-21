@@ -18,10 +18,10 @@ class TcomOnsitePaymentFactory extends AbstractPaymentFactory
 
         $builder
             ->children()
-                ->scalarNode('shop_id')->isRequired()->cannotBeEmpty()->end()
-                ->scalarNode('secret_key')->isRequired()->cannotBeEmpty()->end()
-                ->scalarNode('authorization_type')->defaultValue(0)->end()
-                ->booleanNode('test_mode')->defaultTrue()->end()
+            ->scalarNode('shop_id')->isRequired()->cannotBeEmpty()->end()
+            ->scalarNode('secret_key')->isRequired()->cannotBeEmpty()->end()
+            ->scalarNode('authorization_type')->defaultValue(0)->end()
+            ->booleanNode('test_mode')->defaultTrue()->end()
             ->end();
     }
 

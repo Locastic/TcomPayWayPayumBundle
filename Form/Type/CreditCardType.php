@@ -24,12 +24,14 @@ class CreditCardType extends BaseCreditCardType
             ->add('country', 'country', array('label' => 'form.credit_card.country',))
             ->add('phoneNumber', 'text', array('required' => false, 'label' => 'form.credit_card.phone_number',))
             ->add('email', 'text', array('label' => 'form.credit_card.email',))
-            ->add('installments','choice',
+            ->add(
+                'installments',
+                'choice',
                 array(
                     'label' => 'form.credit_card.installments',
                     'choices' => array(
                         1 => 1,
-                        2 => 2
+                        2 => 2,
                     ),
                 )
             );
@@ -53,6 +55,6 @@ class CreditCardType extends BaseCreditCardType
 
     public function getName()
     {
-        return 'tcompayway_payum_credit_card';
+        return 'payum_credit_card';
     }
 }
