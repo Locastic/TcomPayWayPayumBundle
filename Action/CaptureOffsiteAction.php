@@ -3,6 +3,8 @@
 namespace Locastic\TcomPayWayPayumBundle\Action;
 
 use Locastic\TcomPayWay\AuthorizeForm\Model\Payment as Api;
+use Locastic\TcomPayWay\Helpers\CardTypeInterpreter;
+use Locastic\TcomPayWay\Helpers\ResponseCodeInterpreter;
 use Payum\Core\Action\PaymentAwareAction;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
@@ -47,24 +49,31 @@ class CaptureOffsiteAction extends PaymentAwareAction implements ApiAwareInterfa
 
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
-        if ($model['pgw_trace_ref']) {
-            // tcom return
-        } else {
+        $httpRequest = new GetHttpRequest();
+        $this->payment->execute($httpRequest);
 
-            $this->api->setPgwAmount(500);
-            $this->api->setPgwOrderId('nardužba123');
-            $this->api->setPgwSuccessUrl($request->getToken()->getAfterUrl());
-            $this->api->setPgwFailureUrl($request->getToken()->getAfterUrl());
+        //we are back from tcomapway site so we have to just update model and complete action
+        if (isset($httpRequest->request['pgw_trace_ref'])) {
+            $model['tcompayway_response'] = $this->checkandUpdateReponse($httpRequest->request);
 
-            $renderTemplate = new RenderTemplate(
-                $this->templateName, array(
-                    'payment' => $this->api,
-                )
-            );
-            $this->payment->execute($renderTemplate);
-
-            throw new HttpResponse($renderTemplate->getResult());
+            return;
         }
+
+        $this->api->setPgwAmount($model['pgwAmount']);
+        $this->api->setPgwOrderId($model['pgwOrderId']);
+        $this->api->setPgwEmail($model['pgwEmail']);
+        $this->api->setPgwSuccessUrl($request->getToken()->getTargetUrl());
+        $this->api->setPgwFailureUrl($request->getToken()->getTargetUrl());
+
+        $renderTemplate = new RenderTemplate(
+            $this->templateName, array(
+                'payment' => $this->api,
+            )
+        );
+        $this->payment->execute($renderTemplate);
+
+        throw new HttpResponse($renderTemplate->getResult());
+
 
     }
 
@@ -76,5 +85,25 @@ class CaptureOffsiteAction extends PaymentAwareAction implements ApiAwareInterfa
         return
             $request instanceof Capture &&
             $request->getModel() instanceof \ArrayAccess;
+    }
+
+    private function checkandUpdateReponse($pgwResponse)
+    {
+        if (!$this->api->isPgwResponseValid($pgwResponse)) {
+            throw new RequestNotSupportedException('Not valid PGW Response');
+        }
+
+        // tcompayway request failed
+        if (isset($pgwResponse['pgw_result_code'])) {
+            $pgwResponse['error'] = ResponseCodeInterpreter::getPgwResultCode($pgwResponse['pgw_result_code']);
+
+            return $pgwResponse;
+        }
+
+        // tcom request success, add status code 0 manually
+        $pgwResponse['credit_card'] = CardTypeInterpreter::getPgwCardType($pgwResponse['pgw_card_type_id']);
+        $pgwResponse['pgw_result_code'] = 0;
+
+        return $pgwResponse;
     }
 }

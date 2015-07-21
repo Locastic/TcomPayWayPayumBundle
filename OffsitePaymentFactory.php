@@ -9,7 +9,7 @@ use Locastic\TcomPayWayPayumBundle\Action\StatusAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\PaymentFactoryInterface;
 use Payum\Core\PaymentFactory as CorePaymentFactory;
-use Symfony\Component\Form\FormBuilder;
+
 
 class OffsitePaymentFactory implements PaymentFactoryInterface
 {

@@ -5,27 +5,10 @@ namespace Locastic\TcomPayWayPayumBundle\Action;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Request\GetStatusInterface;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Locastic\TcomPayWay\AuthorizeDirect\Model\Payment as Api;
-use Payum\Core\ApiAwareInterface;
 use Payum\Core\Exception\UnsupportedApiException;
 
-class StatusAction implements ActionInterface, ApiAwareInterface
+class StatusAction implements ActionInterface
 {
-    /** @var  Api */
-    protected $api;
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setApi($api)
-    {
-        if (false == $api instanceof Api) {
-            throw new UnsupportedApiException('Not supported.');
-        }
-
-        $this->api = $api;
-    }
-
     /**
      * {@inheritDoc}
      */
