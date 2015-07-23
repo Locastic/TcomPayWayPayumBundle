@@ -42,7 +42,7 @@ class TcomOffsitePaymentFactory extends AbstractPaymentFactory
     {
         $config = parent::createFactoryConfig();
 
-        $config['payum.template.capture'] = new Parameter('payum.tcompayway_onsite.template.capture');
+        $config['payum.tcompayway_offsite.template.capture'] = new Parameter('payum.tcompayway_offsite.template.capture');
 
         return $config;
     }

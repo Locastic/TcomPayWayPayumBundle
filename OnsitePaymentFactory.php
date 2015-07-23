@@ -26,7 +26,7 @@ class OnsitePaymentFactory extends OffsitePaymentFactory
             array(
                 'payum.factory_name' => 'tcompayway_onsite',
                 'payum.factory_title' => 'TcomPayWay Onsite',
-                'payum.action.capture' => new CaptureOnsiteAction($config['payum.template.capture']),
+                'payum.action.capture' => new CaptureOnsiteAction($config['payum.tcompayway_onsite.template.capture']),
                 'payum.action.status' => new StatusAction(),
                 'payum.action.fill_order_details' => new FillOrderDetailsAction(),
             )

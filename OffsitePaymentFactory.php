@@ -46,7 +46,7 @@ class OffsitePaymentFactory implements PaymentFactoryInterface
             array(
                 'payum.factory_name' => 'tcompayway_offsite',
                 'payum.factory_title' => 'TcomPayWay Offsite',
-                'payum.action.capture' => new CaptureOffsiteAction($config['payum.template.capture']),
+                'payum.action.capture' => new CaptureOffsiteAction($config['payum.tcompayway_offsite.template.capture']),
                 'payum.action.status' => new StatusAction(),
                 'payum.action.fill_order_details' => new FillOrderDetailsAction(),
             )

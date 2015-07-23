@@ -33,7 +33,7 @@ class TcomOnsitePaymentFactory extends TcomOffsitePaymentFactory
             'payum.tcompayway_onsite.template.obtain_credit_card'
         );
 
-        $config['payum.template.capture'] = new Parameter('payum.tcompayway_onsite.template.capture');
+        $config['payum.tcompayway_onsite.template.capture'] = new Parameter('payum.tcompayway_onsite.template.capture');
 
         return $config;
     }
