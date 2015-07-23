@@ -24,7 +24,20 @@ class CaptureOffsiteAction extends PaymentAwareAction implements ApiAwareInterfa
      */
     protected $api;
 
-    protected $templateName = 'LocasticTcomPayWayPayumBundle:TcomPayWay/Offsite:prepare.html.twig';
+    /**
+     * @var string
+     */
+    protected $templateName;
+
+    /**
+     * CaptureOffsiteAction constructor.
+     * @param string $templateName
+     */
+    public function __construct($templateName)
+    {
+        $this->templateName = $templateName;
+    }
+
 
     /**
      * {@inheritDoc}
@@ -87,7 +100,7 @@ class CaptureOffsiteAction extends PaymentAwareAction implements ApiAwareInterfa
             $request->getModel() instanceof \ArrayAccess;
     }
 
-    private function checkandUpdateReponse($pgwResponse)
+    protected function checkandUpdateReponse($pgwResponse)
     {
         if (!$this->api->isPgwResponseValid($pgwResponse)) {
             throw new RequestNotSupportedException('Not valid PGW Response');

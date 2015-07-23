@@ -46,7 +46,7 @@ class OffsitePaymentFactory implements PaymentFactoryInterface
             array(
                 'payum.factory_name' => 'tcompayway_offsite',
                 'payum.factory_title' => 'TcomPayWay Offsite',
-                'payum.action.capture' => new CaptureOffsiteAction(),
+                'payum.action.capture' => new CaptureOffsiteAction($config['payum.template.capture']),
                 'payum.action.status' => new StatusAction(),
                 'payum.action.fill_order_details' => new FillOrderDetailsAction(),
             )
@@ -57,7 +57,7 @@ class OffsitePaymentFactory implements PaymentFactoryInterface
                 'shop_id' => '',
                 'secret_key' => '',
                 'authorization_type' => '0',
-                'test_mode' => true,
+                'sandbox' => true,
             );
             $config->defaults($config['payum.default_options']);
             $config['payum.required_options'] = array(
@@ -74,7 +74,7 @@ class OffsitePaymentFactory implements PaymentFactoryInterface
                     null,
                     $config['authorization_type'],
                     null,
-                    null
+                    $config['sandbox']
                 );
 
                 return $api;

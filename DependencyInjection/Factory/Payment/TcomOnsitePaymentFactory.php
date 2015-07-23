@@ -2,29 +2,11 @@
 
 namespace Locastic\TcomPayWayPayumBundle\DependencyInjection\Factory\Payment;
 
-use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
-use Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\AbstractPaymentFactory;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Parameter;
 
-class TcomOnsitePaymentFactory extends AbstractPaymentFactory
+class TcomOnsitePaymentFactory extends TcomOffsitePaymentFactory
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function addConfiguration(ArrayNodeDefinition $builder)
-    {
-        parent::addConfiguration($builder);
-
-        $builder
-            ->children()
-            ->scalarNode('shop_id')->isRequired()->cannotBeEmpty()->end()
-            ->scalarNode('secret_key')->isRequired()->cannotBeEmpty()->end()
-            ->scalarNode('authorization_type')->defaultValue(0)->end()
-            ->booleanNode('test_mode')->defaultTrue()->end()
-            ->end();
-    }
-
     /**
      * {@inheritDoc}
      */
@@ -33,9 +15,11 @@ class TcomOnsitePaymentFactory extends AbstractPaymentFactory
         parent::load($container);
 
         $container->setParameter(
-            'payum.tcompayway_onsite.obtain_credit_card',
+            'payum.tcompayway_onsite.template.obtain_credit_card',
             'LocasticTcomPayWayPayumBundle:TcomPayWay/Onsite:obtainCreditCard.html.twig'
         );
+
+        $container->setParameter('payum.tcompayway_onsite.template.capture', 'LocasticTcomPayWayPayumBundle:TcomPayWay/Onsite:capture.html.twig');
     }
 
     /**
@@ -45,9 +29,11 @@ class TcomOnsitePaymentFactory extends AbstractPaymentFactory
     {
         $config = parent::createFactoryConfig();
 
-        $config['payum.tcompayway_onsite.obtain_credit_card'] = new Parameter(
-            'payum.tcompayway_onsite.obtain_credit_card'
+        $config['payum.tcompayway_onsite.template.obtain_credit_card'] = new Parameter(
+            'payum.tcompayway_onsite.template.obtain_credit_card'
         );
+
+        $config['payum.template.capture'] = new Parameter('payum.tcompayway_onsite.template.capture');
 
         return $config;
     }
@@ -67,13 +53,5 @@ class TcomOnsitePaymentFactory extends AbstractPaymentFactory
     protected function getPayumPaymentFactoryClass()
     {
         return 'Locastic\TcomPayWayPayumBundle\OnsitePaymentFactory';
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected function getComposerPackage()
-    {
-        return 'locastc/tcompayway';
     }
 }

@@ -26,17 +26,23 @@ class OnsitePaymentFactory extends OffsitePaymentFactory
             array(
                 'payum.factory_name' => 'tcompayway_onsite',
                 'payum.factory_title' => 'TcomPayWay Onsite',
-                'payum.action.capture' => new CaptureOnsiteAction(),
+                'payum.action.capture' => new CaptureOnsiteAction($config['payum.template.capture']),
                 'payum.action.status' => new StatusAction(),
                 'payum.action.fill_order_details' => new FillOrderDetailsAction(),
             )
         );
 
         if (false == $config['payum.api']) {
+            $config['payum.default_options'] = array(
+                'shop_id' => '',
+                'secret_key' => '',
+                'authorization_type' => '0',
+                'sandbox' => true,
+            );
+            $config->defaults($config['payum.default_options']);
             $config['payum.required_options'] = array(
                 'shop_id',
                 'secret_key',
-                'test_mode',
             );
             $config['payum.api'] = function (ArrayObject $config) {
                 $config->validateNotEmpty($config['payum.required_options']);
@@ -58,7 +64,7 @@ class OnsitePaymentFactory extends OffsitePaymentFactory
                     null,
                     null,
                     null,
-                    $config['test_mode']
+                    $config['sandbox']
                 );
 
                 return $api;

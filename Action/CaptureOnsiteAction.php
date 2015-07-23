@@ -3,8 +3,6 @@
 namespace Locastic\TcomPayWayPayumBundle\Action;
 
 use Locastic\TcomPayWay\AuthorizeDirect\Model\Payment as Api;
-use Locastic\TcomPayWay\Helpers\CardTypeInterpreter;
-use Locastic\TcomPayWay\Helpers\ResponseCodeInterpreter;
 use Locastic\TcomPayWayPayumBundle\Entity\CreditCard;
 use Payum\Core\Action\PaymentAwareAction;
 use Payum\Core\ApiAwareInterface;
@@ -20,21 +18,14 @@ use Locastic\TcomPayWayPayumBundle\Request\ObtainCreditCard;
 use Payum\Core\Request\RenderTemplate;
 use Payum\Core\Security\SensitiveValue;
 
-class CaptureOnsiteAction extends PaymentAwareAction implements ApiAwareInterface
+class CaptureOnsiteAction extends CaptureOffsiteAction
 {
-    /**
-     * @var Api
-     */
-    protected $api;
-
-    protected $templateName = 'LocasticTcomPayWayPayumBundle:TcomPayWay/Onsite:prepare.html.twig';
-
     /**
      * {@inheritDoc}
      */
     public function setApi($api)
     {
-        if (false == $api instanceof Api) {
+        if (false === $api instanceof Api) {
             throw new UnsupportedApiException('Not supported.');
         }
 
@@ -144,35 +135,5 @@ class CaptureOnsiteAction extends PaymentAwareAction implements ApiAwareInterfac
         $this->payment->execute($renderTemplate);
 
         throw new HttpResponse($renderTemplate->getResult());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function supports($request)
-    {
-        return
-            $request instanceof Capture &&
-            $request->getModel() instanceof \ArrayAccess;
-    }
-
-    private function checkandUpdateReponse($pgwResponse)
-    {
-        if (!$this->api->isPgwResponseValid($pgwResponse)) {
-            throw new RequestNotSupportedException('Not valid PGW Response');
-        }
-
-        // tcompayway request failed
-        if (isset($pgwResponse['pgw_result_code'])) {
-            $pgwResponse['error'] = ResponseCodeInterpreter::getPgwResultCode($pgwResponse['pgw_result_code']);
-
-            return $pgwResponse;
-        }
-
-        // tcom request success, add status code 0 manually
-        $pgwResponse['credit_card'] = CardTypeInterpreter::getPgwCardType($pgwResponse['pgw_card_type_id']);
-        $pgwResponse['pgw_result_code'] = 0;
-
-        return $pgwResponse;
     }
 }
