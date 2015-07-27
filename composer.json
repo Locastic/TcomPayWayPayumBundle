@@ -1,52 +1,50 @@
 {
-    "name": "locastic/tcompayway-payum-bundle",
-    "type": "library",
-    "description": "Symfony2 Integration for TcomPayway with Payum",
-    "keyword": [
-        "tcompayway",
-        "tcom",
-        "payway",
-        "payum",
-        "symfony",
-        "payment",
-        "sylius",
-        "locastic",
-        "gateway",
-        "ecommerce",
-        "webshop",
-        "symfony2"
-    ],
-    "homepage": "https://github.com/locastic/TcomPayWayPayumBundle",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "locastic",
-            "homepage": "http://locastic.com",
-            "email": "info@locastic.com"
-        },
-        {
-            "name": "Antonio Perić",
-            "email": "antonio@locastic.com"
-        },
-        {
-            "name": "Kruno Knego",
-            "email": "kruno@locastic.com"
-        }
-    ],
-    "require": {
-        "php": ">=5.3.2",
-        "payum/payum":                          "~0.12",
-        "payum/payum-bundle":                   "~0.12",
-        "locastic/tcompayway": "dev-master"
+  "name": "locastic/tcompayway-payum-bundle",
+  "type": "library",
+  "description": "Symfony2 Integration for TcomPayWay with Payum",
+  "keyword": [
+    "tcompayway",
+    "tcom",
+    "payway",
+    "payum",
+    "symfony",
+    "payment",
+    "sylius",
+    "locastic",
+    "gateway",
+    "ecommerce",
+    "webshop",
+    "symfony2"
+  ],
+  "homepage": "https://github.com/locastic/TcomPayWayPayumBundle",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "locastic",
+      "homepage": "http://locastic.com",
+      "email": "info@locastic.com"
     },
-    "require-dev": {
-        "phpunit/phpunit": "~4.0"
-    },
-    "config": {
-        "bin-dir": "bin"
-    },
-    "autoload": {
-        "psr-0": {"Locastic\\TcomPaywayPayumBundle": ""}
-    },
-    "target-dir": "Locastic/TcomPaywayPayumBundle"
+    {
+      "name": "Antonio Perić",
+      "email": "antonio@locastic.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.3.2",
+    "payum/payum": "~0.12",
+    "payum/payum-bundle": "~0.12",
+    "locastic/tcompayway": "dev-master"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "~4.0"
+  },
+  "config": {
+    "bin-dir": "bin"
+  },
+  "autoload": {
+    "psr-0": {
+      "Locastic\\TcomPayWayPayumBundle": ""
+    }
+  },
+  "target-dir": "Locastic/TcomPayWayPayumBundle"
 }

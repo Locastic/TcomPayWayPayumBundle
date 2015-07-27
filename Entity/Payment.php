@@ -1,14 +1,15 @@
 <?php
 
-namespace Locastic\TcomPaywayPayumBundle\Entity;
+namespace Locastic\TcomPayWayPayumBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Payum\Core\Model\ArrayObject;
+use Payum\Core\Model\Order as BasePayment;
+
 /**
- * @ORM\Table(name="payum_payment_details")
+ * @ORM\Table
  * @ORM\Entity
  */
-class PaymentDetails extends ArrayObject
+class Payment extends BasePayment
 {
     /**
      * @ORM\Column(name="id", type="integer")
@@ -18,9 +19,4 @@ class PaymentDetails extends ArrayObject
      * @var integer $id
      */
     protected $id;
-
-    public function getId()
-    {
-        return $this->id;
-    }
 }

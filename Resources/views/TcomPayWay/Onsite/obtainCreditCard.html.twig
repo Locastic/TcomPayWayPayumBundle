@@ -1,0 +1,67 @@
+{% extends layout ?: "@PayumCore/layout.html.twig" %}
+
+{% block payum_body %}
+    <form method="POST">
+        {{ form_errors(form) }}
+        {{ form_row(form.number) }}
+        {{ form_row(form.securityCode) }}
+        {{ form_row(form.expireAt) }}
+        <div class="installments" style="display: none;">
+            {{ form_row(form.installments) }}
+        </div>
+
+        {{ form_row(form.holder) }}
+        {{ form_row(form.lastName) }}
+        {{ form_row(form.street) }}
+        {{ form_row(form.city) }}
+        {{ form_row(form.postCode) }}
+        {{ form_row(form.country) }}
+        {{ form_row(form.phoneNumber) }}
+        {{ form_row(form.email) }}
+
+        {{ form_rest(form) }}
+
+        <input type="submit" value="Pošalji"/>
+    </form>
+{% endblock %}
+
+{% block payum_javascripts %}
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript">
+        var cardNumberSent = null;
+
+        $("#tcompayway_payum_credit_card_number").on('input paste', function () {
+            if ($(this).val().length > 6) {
+                var tempCardNumber = $(this).val().substr(0, 6);
+                var installmentsSelect = $('#tcompayway_payum_credit_card_installments');
+
+                if (tempCardNumber != cardNumberSent) {
+
+                    $.post("{{ path('locastic_tcompaywaypayum_api_installments') }}", {
+                        'pgwAmount': 150000,
+                        'pgwCreditCard': tempCardNumber
+                    }, function (data) {
+                        installmentsSelect.empty();
+
+                        $.each(data.Installments, function (value, key) {
+                            installmentsSelect.append($("<option></option>")
+                                    .attr("value", value).text(key));
+                        });
+
+                        if (data.Installments[data.Installments.length - 1] > 1) {
+                            $('.installments').show();
+                        } else {
+                            $('.installments').hide();
+                        }
+                    });
+
+                    cardNumberSent = tempCardNumber;
+                } else if (installmentsSelect.find('option').length > 1) {
+                    $('.installments').show();
+                }
+            } else {
+                $('.installments').hide();
+            }
+        });
+    </script>
+{% endblock payum_javascripts %}

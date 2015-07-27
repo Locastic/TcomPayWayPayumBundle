@@ -1,0 +1,15 @@
+form:
+    credit_card:
+        holder: Ime
+        number: Broj kartice
+        expire_at: Vrijedi do
+        security_code: Sigurnosni (CVV) kod
+        first_name: Ime
+        last_name: Prezime
+        address: Adresa
+        city: Grad
+        post_code: Poštanski broj
+        country: Država
+        email: Email
+        phone_number: Broj telefona
+        installments: Broj rata

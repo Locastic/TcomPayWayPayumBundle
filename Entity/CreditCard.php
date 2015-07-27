@@ -1,5 +1,6 @@
 <?php
-namespace Locastic\TcomPaywayPayumBundle\Entity;
+
+namespace Locastic\TcomPayWayPayumBundle\Entity;
 
 use Payum\Core\Model\CreditCard as BaseCreditCard;
 
@@ -8,17 +9,12 @@ class CreditCard extends BaseCreditCard
     /**
      * @var string
      */
-    protected $holderSurname;
+    protected $lastName;
 
     /**
      * @var string
      */
-    protected $email;
-
-    /**
-     * @var string
-     */
-    protected $address;
+    protected $street;
 
     /**
      * @var string
@@ -28,7 +24,7 @@ class CreditCard extends BaseCreditCard
     /**
      * @var string
      */
-    protected $zipCode;
+    protected $postCode;
 
     /**
      * @var string
@@ -41,19 +37,45 @@ class CreditCard extends BaseCreditCard
     protected $phoneNumber;
 
     /**
+     * @var string
+     */
+    protected $email;
+
+    /**
+     * @var int
+     */
+    protected $installments;
+
+    /**
      * @return string
      */
-    public function getAddress()
+    public function getLastName()
     {
-        return $this->address;
+        return $this->lastName;
     }
 
     /**
-     * @param string $address
+     * @param string $lastName
      */
-    public function setAddress($address)
+    public function setLastName($lastName)
     {
-        $this->address = $address;
+        $this->lastName = $lastName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStreet()
+    {
+        return $this->street;
+    }
+
+    /**
+     * @param string $street
+     */
+    public function setStreet($street)
+    {
+        $this->street = $street;
     }
 
     /**
@@ -75,6 +97,22 @@ class CreditCard extends BaseCreditCard
     /**
      * @return string
      */
+    public function getPostCode()
+    {
+        return $this->postCode;
+    }
+
+    /**
+     * @param string $postCode
+     */
+    public function setPostCode($postCode)
+    {
+        $this->postCode = $postCode;
+    }
+
+    /**
+     * @return string
+     */
     public function getCountry()
     {
         return $this->country;
@@ -91,33 +129,17 @@ class CreditCard extends BaseCreditCard
     /**
      * @return string
      */
-    public function getHolderSurname()
+    public function getPhoneNumber()
     {
-        return $this->holderSurname;
+        return $this->phoneNumber;
     }
 
     /**
-     * @param string $holderSurname
+     * @param string $phoneNumber
      */
-    public function setHolderSurname($holderSurname)
+    public function setPhoneNumber($phoneNumber)
     {
-        $this->holderSurname = $holderSurname;
-    }
-
-    /**
-     * @return string
-     */
-    public function getZipCode()
-    {
-        return $this->zipCode;
-    }
-
-    /**
-     * @param string $zipCode
-     */
-    public function setZipCode($zipCode)
-    {
-        $this->zipCode = $zipCode;
+        $this->phoneNumber = $phoneNumber;
     }
 
     /**
@@ -137,18 +159,18 @@ class CreditCard extends BaseCreditCard
     }
 
     /**
-     * @return string
+     * @return int
      */
-    public function getPhoneNumber()
+    public function getInstallments()
     {
-        return $this->phoneNumber;
+        return $this->installments;
     }
 
     /**
-     * @param string $phoneNumber
+     * @param int $installments
      */
-    public function setPhoneNumber($phoneNumber)
+    public function setInstallments($installments)
     {
-        $this->phoneNumber = $phoneNumber;
+        $this->installments = $installments;
     }
 }

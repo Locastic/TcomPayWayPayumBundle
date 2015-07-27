@@ -1,14 +1,32 @@
 <?php
 
-namespace Locastic\TcomPaywayPayumBundle\Action;
+namespace Locastic\TcomPayWayPayumBundle\Action;
 
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Request\GetStatusInterface;
 use Payum\Core\Exception\RequestNotSupportedException;
+use Locastic\TcomPayWay\AuthorizeDirect\Model\Payment as OnsiteApi;
+use Locastic\TcomPayWay\AuthorizeForm\Model\Payment as OffsiteApi;
+use Payum\Core\ApiAwareInterface;
+use Payum\Core\Exception\UnsupportedApiException;
 
-
-class StatusAction implements ActionInterface
+class StatusAction implements ActionInterface, ApiAwareInterface
 {
+    /** @var  mixed */
+    protected $api;
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setApi($api)
+    {
+        if (false == $api instanceof OnsiteApi && false == $api instanceof OffsiteApi) {
+            throw new UnsupportedApiException('Not supported.');
+        }
+
+        $this->api = $api;
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -21,25 +39,27 @@ class StatusAction implements ActionInterface
 
         $model = $request->getModel();
 
-        if (false == isset($model['paymentStatus'])) {
+        if (false == isset($model['tcompayway_response'])) {
             $request->markNew();
 
             return;
         }
 
-        if ('success' == $model['paymentStatus'] or 'finished' == $model['paymentStatus']) {
+        $statusCode = $model['tcompayway_response']['pgw_result_code'];
+
+        if (0 == $statusCode && 0 == $this->api->getPgwAuthorizationType()) {
+            $request->markAuthorized();
+
+            return;
+        }
+
+        if (0 == $statusCode && 1 == $this->api->getPgwAuthorizationType()) {
             $request->markCaptured();
 
             return;
         }
 
-        if ('secure3d' == $model['paymentStatus']) {
-            $request->markPending();
-
-            return;
-        }
-
-        if ('error' == $model['paymentStatus']) {
+        if ($statusCode > 0) {
             $request->markFailed();
 
             return;

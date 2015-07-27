@@ -1,14 +1,15 @@
 <?php
 
-namespace Locastic\TcomPaywayPayumBundle;
+namespace Locastic\TcomPayWayPayumBundle;
 
+use Locastic\TcomPayWayPayumBundle\DependencyInjection\Factory\Payment\TcomOffsitePaymentFactory;
+use Locastic\TcomPayWayPayumBundle\DependencyInjection\Factory\Payment\TcomOnsitePaymentFactory;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Payum\Bundle\PayumBundle\DependencyInjection\PayumExtension;
 
-use Locastic\TcomPaywayPayumBundle\Bridge\Symfony\TcomPayWayPaymentFactory;
 
-class LocasticTcomPaywayPayumBundle extends Bundle
+class LocasticTcomPayWayPayumBundle extends Bundle
 {
     public function build(ContainerBuilder $container)
     {
@@ -17,6 +18,7 @@ class LocasticTcomPaywayPayumBundle extends Bundle
         /** @var $extension PayumExtension */
         $extension = $container->getExtension('payum');
 
-        $extension->addPaymentFactory(new TcomPayWayPaymentFactory());
+        $extension->addPaymentFactory(new TcomOffsitePaymentFactory());
+        $extension->addPaymentFactory(new TcomOnsitePaymentFactory());
     }
 }

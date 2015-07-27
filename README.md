@@ -11,7 +11,7 @@ you can find more about creating security token and payment details.
 
 ## Installation
 
-For installation of TcomPaywayPayumBundle just include it in your composer.json file and run Composer's update
+For installation of TcomPayWayPayumBundle just include it in your composer.json file and run Composer's update
 command.
 
 Afterwards, register the new bundle in your AppKernel.
@@ -21,7 +21,7 @@ Afterwards, register the new bundle in your AppKernel.
     {
         $bundles = array(
             ...
-            new \Locastic\TcomPaywayPayumBundle\LocasticTcomPaywayPayumBundle(),
+            new \Locastic\TcomPayWayPayumBundle\LocasticTcomPayWayPayumBundle(),
             ...
         );
 
@@ -55,7 +55,7 @@ Now you need to configure capture_payment service, add tcompayway gateway to syl
     # app/config/config.yml
     services:
         payum.tcompayway.action.capture_payment:
-            class: Locastic\TcomPaywayPayumBundle\Bridge\Sylius\CapturePaymentAction
+            class: Locastic\TcomPayWayPayumBundle\Bridge\Sylius\CapturePaymentAction
             arguments: ["%tcompayway.shop_name%"]
             tags:
                 - { name: payum.action, factory: tcompayway, prepend: true }
