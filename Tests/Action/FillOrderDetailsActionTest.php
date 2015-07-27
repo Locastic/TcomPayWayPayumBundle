@@ -1,194 +1,89 @@
 <?php
-namespace Locastic\TcomPayWayPayumBundle\Tests\Action\StatusActionTest;
+namespace Locastic\TcomPayWayPayumBundle\Tests\Action;
 
-use Locastic\TcomPayWay\AuthorizeDirect\Model\Payment as OnsiteApi;
-use Locastic\TcomPayWay\AuthorizeForm\Model\Payment as OffsiteApi;
-use Payum\Core\Request\GetHumanStatus;
-use Locastic\TcomPayWayPayumBundle\Action\StatusAction;
+use Locastic\TcomPayWayPayumBundle\Action\FillOrderDetailsAction;
+use Payum\Core\Model\Order;
+use Payum\Core\Request\FillOrderDetails;
 use Payum\Core\Tests\GenericActionTest;
 
-class StatusActionTest extends GenericActionTest
+class FillOrderDetailsActionTest extends GenericActionTest
 {
-    protected $actionClass = 'Locastic\TcomPayWayPayumBundle\Action\StatusAction';
+    protected $actionClass = 'Locastic\TcomPayWayPayumBundle\Action\FillOrderDetailsAction';
 
-    protected $requestClass = 'Payum\Core\Request\GetHumanStatus';
+    protected $requestClass = 'Payum\Core\Request\FillOrderDetails';
 
-    /**
-     * @test
-     */
-    public function shouldMarkNewIfDetailsEmpty()
+    public function provideSupportedRequests()
     {
-        $action = new StatusAction();
-
-        $action->execute($status = new GetHumanStatus(array()));
-
-        $this->assertTrue($status->isNew());
+        return array(
+            array(new $this->requestClass(new Order())),
+            array(new $this->requestClass($this->getMock('Payum\Core\Model\OrderInterface'))),
+            array(new $this->requestClass(new Order(), $this->getMock('Payum\Core\Security\TokenInterface'))),
+        );
     }
 
-    /**
-     * @test
-     */
-    public function shouldMarkNewIfTcomPayWayResponseNotSet()
+    public function provideNotSupportedRequests()
     {
-        $action = new StatusAction();
-
-        $action->execute($status = new GetHumanStatus(array()));
-
-        $this->assertTrue($status->isNew());
+        return array(
+            array('foo'),
+            array(array('foo')),
+            array(new \stdClass()),
+            array($this->getMockForAbstractClass('Payum\Core\Request\Generic', array(array()))),
+        );
     }
 
     /**
      * @test
      */
-    public function shouldMarkOnsiteAuthorizedIfTcomPayWayResponseCodeIsZeroAndAuthorizationTypeIsZero()
+    public function shouldCorrectlyConvertOrderToDetailsAndSetItBack()
     {
-        $action = new StatusAction();
-        $action->setApi($this->getOnsiteApi());
+        $order = new Order();
+        $order->setNumber('theNumber');
+        $order->setCurrencyCode('USD');
+        $order->setTotalAmount(123);
+        $order->setDescription('the description');
+        $order->setClientId('theClientId');
+        $order->setClientEmail('theClientEmail');
 
-        $action->execute(
-            $status = new GetHumanStatus(
-                array(
-                    'tcompayway_response' => array('pgw_result_code' => 0),
-                )
-            )
-        );
+        $action = new FillOrderDetailsAction();
 
-        $this->assertTrue($status->isAuthorized());
+        $action->execute(new FillOrderDetails($order));
+
+        $details = $order->getDetails();
+
+        $this->assertNotEmpty($details);
+
+        $this->assertArrayHasKey('pgwAmount', $details);
+        $this->assertEquals(123, $details['pgwAmount']);
+
+        $this->assertArrayHasKey('pgwOrderId', $details);
+        $this->assertEquals('theNumber', $details['pgwOrderId']);
+
+        $this->assertArrayHasKey('pgwEmail', $details);
+        $this->assertEquals('theClientEmail', $details['pgwEmail']);
     }
 
     /**
      * @test
      */
-    public function shouldMarkOnsiteCapturedIfTcomPayWayResponseCodeIsZeroAndAuthorizationTypeIsOne()
+    public function shouldNotOverwriteAlreadySetExtraDetails()
     {
-        $action = new StatusAction();
-        $api = $this->getOnsiteApi();
-        $api->setPgwAuthorizationType(1);
-        $action->setApi($api);
+        $order = new Order();
+        $order->setCurrencyCode('USD');
+        $order->setTotalAmount(123);
+        $order->setDescription('the description');
+        $order->setDetails(array(
+            'foo' => 'fooVal',
+        ));
 
-        $action->execute(
-            $status = new GetHumanStatus(
-                array(
-                    'tcompayway_response' => array('pgw_result_code' => 0),
-                )
-            )
-        );
+        $action = new FillOrderDetailsAction();
 
-        $this->assertTrue($status->isCaptured());
+        $action->execute(new FillOrderDetails($order));
+
+        $details = $order->getDetails();
+
+        $this->assertNotEmpty($details);
+
+        $this->assertArrayHasKey('foo', $details);
+        $this->assertEquals('fooVal', $details['foo']);
     }
-
-    /**
-     * @test
-     */
-    public function shouldMarkOnsiteFailedIfTcomPayWayResponseCodeIsMoreThenZeroAndAuthorizationTypeIsZero()
-    {
-        $action = new StatusAction();
-        $action->setApi($this->getOnsiteApi());
-
-        $action->execute(
-            $status = new GetHumanStatus(
-                array(
-                    'tcompayway_response' => array('pgw_result_code' => 1001),
-                )
-            )
-        );
-
-        $this->assertTrue($status->isFailed());
-    }
-
-    /**
-     * @test
-     */
-    public function shouldMarkOffsiteAuthorizedIfTcomPayWayResponseCodeIsZeroAndAuthorizationTypeIsZero()
-    {
-        $action = new StatusAction();
-        $action->setApi($this->getOffsiteApi());
-
-        $action->execute(
-            $status = new GetHumanStatus(
-                array(
-                    'tcompayway_response' => array('pgw_result_code' => 0),
-                )
-            )
-        );
-
-        $this->assertTrue($status->isAuthorized());
-    }
-
-    /**
-     * @test
-     */
-    public function shouldMarkOffsiteCapturedIfTcomPayWayResponseCodeIsZeroAndAuthorizationTypeIsOne()
-    {
-        $action = new StatusAction();
-        $api = $this->getOffsiteApi();
-        $api->setPgwAuthorizationType(1);
-        $action->setApi($api);
-
-        $action->execute(
-            $status = new GetHumanStatus(
-                array(
-                    'tcompayway_response' => array('pgw_result_code' => 0),
-                )
-            )
-        );
-
-        $this->assertTrue($status->isCaptured());
-    }
-
-    /**
-     * @test
-     */
-    public function shouldMarkOffsiteFailedIfTcomPayWayResponseCodeIsMoreThenZeroAndAuthorizationTypeIsZero()
-    {
-        $action = new StatusAction();
-        $action->setApi($this->getOffsiteApi());
-
-        $action->execute(
-            $status = new GetHumanStatus(
-                array(
-                    'tcompayway_response' => array('pgw_result_code' => 1001),
-                )
-            )
-        );
-
-        $this->assertTrue($status->isFailed());
-    }
-
-    private function getOnsiteApi()
-    {
-        return new OnsiteApi(
-            12345,
-            'secretkey',
-            'order-123',
-            102400,
-            0,
-            'http://www.mojducan.com/success/order-123',
-            'http://www.mojducan.com/failure/order-123',
-            '111111111111111',
-            '1812',
-            '123',
-            'John',
-            'Smith',
-            'Street 49',
-            'Locastic City',
-            '1950',
-            'LocasticLand',
-            'email@example.com'
-        );
-    }
-
-    private function getOffsiteApi()
-    {
-        return new OffsiteApi(
-            123,
-            'new-secret-key',
-            'narudžba456',
-            789,
-            0,
-            'http://www.mojducan.com/success/narudžba456',
-            'http://www.mojducan.com/failure/narudžba456'
-        );
-    }
-
 }

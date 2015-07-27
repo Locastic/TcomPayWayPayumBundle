@@ -1,5 +1,5 @@
 <?php
-namespace Locastic\TcomPayWayPayumBundle\Tests\Action\StatusActionTest;
+namespace Locastic\TcomPayWayPayumBundle\Tests\Action;
 
 use Locastic\TcomPayWay\AuthorizeDirect\Model\Payment as OnsiteApi;
 use Locastic\TcomPayWay\AuthorizeForm\Model\Payment as OffsiteApi;
