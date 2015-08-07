@@ -78,6 +78,19 @@ class CaptureOffsiteAction extends PaymentAwareAction implements ApiAwareInterfa
         $this->api->setPgwSuccessUrl($request->getToken()->getTargetUrl());
         $this->api->setPgwFailureUrl($request->getToken()->getTargetUrl());
 
+        $this->api->setPgwFirstName($model['pgwFirstName']);
+        $this->api->setPgwLastName($model['pgwLastName']);
+        $this->api->setPgwStreet($model['pgwStreet']);
+        $this->api->setPgwCity($model['pgwCity']);
+        $this->api->setPgwPostCode($model['pgwPostCode']);
+        $this->api->setPgwCountry($model['pgwCountry']);
+        $this->api->setPgwPhoneNumber($model['pgwPhoneNumber']);
+
+        $this->api->setPgwLanguage($model['pgwLanguage']);
+        $this->api->setPgwMerchantData($model['pgwMerchantData']);
+        $this->api->setPgwOrderInfo($model['pgwOrderInfo']);
+        $this->api->setPgwOrderItems($model['pgwOrderItems']);
+
         $renderTemplate = new RenderTemplate(
             $this->templateName, array(
                 'payment' => $this->api,
@@ -86,8 +99,6 @@ class CaptureOffsiteAction extends PaymentAwareAction implements ApiAwareInterfa
         $this->payment->execute($renderTemplate);
 
         throw new HttpResponse($renderTemplate->getResult());
-
-
     }
 
     /**
