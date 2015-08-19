@@ -10,8 +10,8 @@ use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\GetStatusInterface;
 use SM\Factory\FactoryInterface;
 use Sylius\Bundle\PayumBundle\Payum\Action\AbstractPaymentStateAwareAction;
-use Sylius\Bundle\PayumBundle\Payum\Action\PaymentStatusAction as BasePaymentStatusAction;
 use Sylius\Component\Payment\Model\PaymentInterface;
+use Doctrine\Common\Persistence\ObjectManager;
 
 class PaymentStatusAction extends AbstractPaymentStateAwareAction implements ApiAwareInterface
 {
@@ -20,7 +20,7 @@ class PaymentStatusAction extends AbstractPaymentStateAwareAction implements Api
 
     protected $objectManager;
 
-    public function __construct($objectManager, FactoryInterface $factory)
+    public function __construct(ObjectManager $objectManager, FactoryInterface $factory)
     {
         parent::__construct($factory);
 
@@ -72,15 +72,14 @@ class PaymentStatusAction extends AbstractPaymentStateAwareAction implements Api
         $statusCode = $paymentDetails['tcompayway_response']['pgw_result_code'];
 
         if (0 == $statusCode && 0 == $this->api->getPgwAuthorizationType()) {
-            $this->updatePaymentState($payment, 'process');
-            $this->objectManager->flush();
+            // to do this should be authorized but sylius has bug atm
+            $request->markCaptured();
 
             return;
         }
 
         if (0 == $statusCode && 1 == $this->api->getPgwAuthorizationType()) {
-            $this->updatePaymentState($payment, 'complete');
-            $this->objectManager->flush();
+            $request->markCaptured();
 
             return;
         }
@@ -101,7 +100,6 @@ class PaymentStatusAction extends AbstractPaymentStateAwareAction implements Api
     {
         return
             $request instanceof GetStatusInterface &&
-            $request->getModel() instanceof PaymentInterface
-            ;
+            $request->getModel() instanceof PaymentInterface;
     }
 }
