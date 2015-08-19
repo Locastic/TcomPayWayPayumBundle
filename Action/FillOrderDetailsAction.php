@@ -23,6 +23,19 @@ class FillOrderDetailsAction implements ActionInterface
         $details['pgwAmount'] = $order->getTotalAmount();
         $details['pgwEmail'] = $order->getClientEmail();
 
+        $model['pgwFirstName'] = '';
+        $model['pgwLastName'] = '';
+        $model['pgwStreet'] = '';
+        $model['pgwCity'] = '';
+        $model['pgwPostCode'] = '';
+        $model['pgwCountry'] = '';
+        $model['pgwPhoneNumber'] = '';
+
+        $model['pgwLanguage'] = '';
+        $model['pgwMerchantData'] = '';
+        $model['pgwOrderInfo'] = '';
+        $model['pgwOrderItems'] = '';
+
         $order->setDetails($details);
     }
 

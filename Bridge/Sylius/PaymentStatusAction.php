@@ -1,19 +1,32 @@
 <?php
 
-namespace Locastic\TcomPayWayPayumBundle\Action;
+namespace Locastic\TcomPayWayPayumBundle\Bridge\Sylius;
 
-use Payum\Core\Action\ActionInterface;
-use Payum\Core\Request\GetStatusInterface;
-use Payum\Core\Exception\RequestNotSupportedException;
 use Locastic\TcomPayWay\AuthorizeDirect\Model\Payment as OnsiteApi;
 use Locastic\TcomPayWay\AuthorizeForm\Model\Payment as OffsiteApi;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\Exception\UnsupportedApiException;
+use Payum\Core\Exception\RequestNotSupportedException;
+use Payum\Core\Request\GetStatusInterface;
+use SM\Factory\FactoryInterface;
+use Sylius\Bundle\PayumBundle\Payum\Action\AbstractPaymentStateAwareAction;
+use Sylius\Component\Payment\Model\PaymentInterface;
+use Doctrine\Common\Persistence\ObjectManager;
 
-class StatusAction implements ActionInterface, ApiAwareInterface
+class PaymentStatusAction extends AbstractPaymentStateAwareAction implements ApiAwareInterface
 {
     /** @var  mixed */
     protected $api;
+
+    protected $objectManager;
+
+    public function __construct(ObjectManager $objectManager, FactoryInterface $factory)
+    {
+        parent::__construct($factory);
+
+        $this->objectManager = $objectManager;
+    }
+
 
     /**
      * {@inheritDoc}
@@ -27,29 +40,40 @@ class StatusAction implements ActionInterface, ApiAwareInterface
         $this->api = $api;
     }
 
+
     /**
      * {@inheritDoc}
+     *
+     * @param $request GetStatusInterface
      */
     public function execute($request)
     {
-
-        /** @var $request GetStatusInterface */
-        if (false == $this->supports($request)) {
+        if (!$this->supports($request)) {
             throw RequestNotSupportedException::createActionNotSupported($this, $request);
         }
 
-        $model = $request->getModel();
+        /** @var $payment PaymentInterface */
+        $payment = $request->getModel();
+        $paymentDetails = $payment->getDetails();
 
-        if (false == isset($model['tcompayway_response'])) {
+        if (empty($paymentDetails)) {
             $request->markNew();
 
             return;
         }
 
-        $statusCode = $model['tcompayway_response']['pgw_result_code'];
+
+        if (false == isset($paymentDetails['tcompayway_response'])) {
+            $request->markNew();
+
+            return;
+        }
+
+        $statusCode = $paymentDetails['tcompayway_response']['pgw_result_code'];
 
         if (0 == $statusCode && 0 == $this->api->getPgwAuthorizationType()) {
-            $request->markAuthorized();
+            // to do this should be authorized but sylius has bug atm
+            $request->markCaptured();
 
             return;
         }
@@ -76,6 +100,6 @@ class StatusAction implements ActionInterface, ApiAwareInterface
     {
         return
             $request instanceof GetStatusInterface &&
-            $request->getModel() instanceof \ArrayAccess;
+            $request->getModel() instanceof PaymentInterface;
     }
 }
