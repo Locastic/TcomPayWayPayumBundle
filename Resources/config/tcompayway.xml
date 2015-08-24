@@ -34,19 +34,19 @@
         </service>
 
         <!--  sylius bridges -->
-        <service id="sylius.payum.tcompwayway_offsite.action.capture_payment_offsite" class="Locastic\TcomPayWayPayumBundle\Bridge\Sylius\CapturePaymentAction">
-            <tag name="payum.action" factory="tcompayway_offsite" alias="capture_sylius_order" prepend="true"/>
-            <tag name="payum.action" factory="tcompayway_onsite" alias="capture_sylius_order" prepend="true"/>
-        </service>
+        <!--<service id="sylius.payum.tcompwayway_offsite.action.capture_payment_offsite" class="Locastic\TcomPayWayPayumBundle\Bridge\Sylius\CapturePaymentAction">-->
+            <!--<tag name="payum.action" factory="tcompayway_offsite" alias="capture_sylius_order" prepend="true"/>-->
+            <!--<tag name="payum.action" factory="tcompayway_onsite" alias="capture_sylius_order" prepend="true"/>-->
+        <!--</service>-->
 
-        <service id="sylius.payum.tcompayway.action.notify" class="Locastic\TcomPayWayPayumBundle\Bridge\Sylius\PaymentStatusAction">
-            <!--<argument type="service" id="sylius.repository.payment" />-->
-            <argument type="service" id="sylius.manager.payment" />
-            <argument type="service" id="sm.factory" />
+        <!--<service id="sylius.payum.tcompayway.action.notify" class="Locastic\TcomPayWayPayumBundle\Bridge\Sylius\PaymentStatusAction">-->
+            <!--&lt;!&ndash;<argument type="service" id="sylius.repository.payment" />&ndash;&gt;-->
+            <!--<argument type="service" id="sylius.manager.payment" />-->
+            <!--<argument type="service" id="sm.factory" />-->
 
-            <tag name="payum.action" factory="tcompayway_offsite" alias="notify_sylius_order" prepend="true"/>
-            <tag name="payum.action" factory="tcompayway_onsite" alias="notify_sylius_order"/>
-        </service>
+            <!--<tag name="payum.action" factory="tcompayway_offsite" alias="notify_sylius_order" prepend="true"/>-->
+            <!--<tag name="payum.action" factory="tcompayway_onsite" alias="notify_sylius_order"/>-->
+        <!--</service>
     </services>
 
 
