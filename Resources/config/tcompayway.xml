@@ -46,7 +46,7 @@
 
             <!--<tag name="payum.action" factory="tcompayway_offsite" alias="notify_sylius_order" prepend="true"/>-->
             <!--<tag name="payum.action" factory="tcompayway_onsite" alias="notify_sylius_order"/>-->
-        <!--</service>
+        <!--</service>-->
     </services>
 
 
