@@ -58,6 +58,7 @@ class OffsitePaymentFactory implements PaymentFactoryInterface
                 'secret_key' => '',
                 'authorization_type' => '0',
                 'sandbox' => true,
+                'disable_installments' => '1',
             );
             $config->defaults($config['payum.default_options']);
             $config['payum.required_options'] = array(
@@ -77,6 +78,8 @@ class OffsitePaymentFactory implements PaymentFactoryInterface
                     null,
                     $config['sandbox']
                 );
+                
+                $api->setPgwDisableInstallments($config['disable_installments']);
 
                 return $api;
             };
