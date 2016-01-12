@@ -22,6 +22,7 @@ class TcomOffsitePaymentFactory extends AbstractPaymentFactory
                 ->scalarNode('secret_key')->isRequired()->cannotBeEmpty()->end()
                 ->scalarNode('authorization_type')->defaultValue(0)->end()
                 ->booleanNode('sandbox')->defaultTrue()->end()
+                ->scalarNode('disable_installments')->defaultValue(1)->end()
             ->end();
     }
 
