@@ -74,6 +74,7 @@ Now you need to configure capture_payment service, add tcompayway gateway to syl
     tcompayway.shop_password: 'YOUR_PASSWORD'
     tcompayway.shop_secret_key: 'YOUR_SECRET'
     tcompayway.shop_name: 'YOUR_SHOP_NAME' # this will be used in transaction description in user's bank account transactions
+    tcompaway.disable_installments: 1/0 #default 1
 
 You also need to configure payment methods in Sylius administration to use T-com PayWay gateway.
 
