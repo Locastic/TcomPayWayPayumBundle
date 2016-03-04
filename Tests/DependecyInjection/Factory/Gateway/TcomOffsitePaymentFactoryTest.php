@@ -1,26 +1,26 @@
 <?php
-namespace Locastic\TcomPayWayPayumBundle\Tests\DependencyInjection\Factory\Payment;
+namespace Locastic\TcomPayWayPayumBundle\Tests\DependencyInjection\Factory\Gateway;
 
-use Locastic\TcomPayWayPayumBundle\DependencyInjection\Factory\Payment\TcomOffsitePaymentFactory;
+use Locastic\TcomPayWayPayumBundle\DependencyInjection\Factory\Gateway\TcomOffsiteGatewayFactory;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
-class TcomOffsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
+class TcomOffsiteGatewayFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
      */
-    public function shouldBeSubClassOfAbstractPaymentFactory()
+    public function shouldBeSubClassOfAbstractGatewayFactory()
     {
         $rc = new \ReflectionClass(
-            'Locastic\TcomPayWayPayumBundle\DependencyInjection\Factory\Payment\TcomOffsitePaymentFactory'
+            'Locastic\TcomPayWayPayumBundle\DependencyInjection\Factory\Gateway\TcomOffsiteGatewayFactory'
         );
 
         $this->assertTrue(
-            $rc->isSubclassOf('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Payment\AbstractPaymentFactory')
+            $rc->isSubclassOf('Payum\Bundle\PayumBundle\DependencyInjection\Factory\Gateway\AbstractGatewayFactory')
         );
     }
 
@@ -29,7 +29,7 @@ class TcomOffsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function couldBeConstructedWithoutAnyArguments()
     {
-        new TcomOffsitePaymentFactory;
+        new TcomOffsiteGatewayFactory;
     }
 
     /**
@@ -37,7 +37,7 @@ class TcomOffsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowGetName()
     {
-        $factory = new TcomOffsitePaymentFactory;
+        $factory = new TcomOffsiteGatewayFactory;
 
         $this->assertEquals('tcompayway_offsite', $factory->getName());
     }
@@ -48,7 +48,7 @@ class TcomOffsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowAddConfigurationWithoutAuthorizationTypeAndSandbox()
     {
-        $factory = new TcomOffsitePaymentFactory;
+        $factory = new TcomOffsiteGatewayFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -71,7 +71,7 @@ class TcomOffsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('sandbox', $config);
         $this->assertTrue($config['sandbox']);
 
-        //come from abstract payment factory
+        //come from abstract gateway factory
         $this->assertArrayHasKey('actions', $config);
         $this->assertArrayHasKey('apis', $config);
         $this->assertArrayHasKey('extensions', $config);
@@ -82,7 +82,7 @@ class TcomOffsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowAddConfigurationWithAuthorizationTypeAndSandbox()
     {
-        $factory = new TcomOffsitePaymentFactory;
+        $factory = new TcomOffsiteGatewayFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -112,7 +112,7 @@ class TcomOffsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('sandbox', $config);
         $this->assertFalse($config['sandbox']);
 
-        //come from abstract payment factory
+        //come from abstract gateway factory
         $this->assertArrayHasKey('actions', $config);
         $this->assertArrayHasKey('apis', $config);
         $this->assertArrayHasKey('extensions', $config);
@@ -126,7 +126,7 @@ class TcomOffsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function thrownIfShopIdOptionNotSet()
     {
-        $factory = new TcomOffsitePaymentFactory;
+        $factory = new TcomOffsiteGatewayFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -144,7 +144,7 @@ class TcomOffsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function thrownIfSecretKeyOptionNotSet()
     {
-        $factory = new TcomOffsitePaymentFactory;
+        $factory = new TcomOffsiteGatewayFactory;
 
         $tb = new TreeBuilder();
         $rootNode = $tb->root('foo');
@@ -166,7 +166,7 @@ class TcomOffsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldAllowCreatePaymentAndReturnItsId()
     {
-        $factory = new TcomOffsitePaymentFactory;
+        $factory = new TcomOffsiteGatewayFactory;
 
         $container = new ContainerBuilder();
         $paymentId = $factory->create(
@@ -200,7 +200,7 @@ class TcomOffsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldLoadFactoryWithTemplates()
     {
-        $factory = new TcomOffsitePaymentFactory;
+        $factory = new TcomOffsiteGatewayFactory;
 
         $container = new ContainerBuilder;
         $factory->load($container);
@@ -208,10 +208,10 @@ class TcomOffsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($container->hasDefinition('payum.tcompayway_offsite.factory'));
         $factoryService = $container->getDefinition('payum.tcompayway_offsite.factory');
 
-        $this->assertEquals('Locastic\TcomPayWayPayumBundle\OffsitePaymentFactory', $factoryService->getClass());
+        $this->assertEquals('Locastic\TcomPayWayPayumBundle\OffsiteGatewayFactory', $factoryService->getClass());
         $this->assertEquals(
             array(array('name' => 'tcompayway_offsite', 'human_name' => 'Tcompayway Offsite',)),
-            $factoryService->getTag('payum.payment_factory')
+            $factoryService->getTag('payum.gateway_factory')
         );
 
         $factoryConfig = $factoryService->getArgument(0);
@@ -222,7 +222,7 @@ class TcomOffsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('payum.template.layout', $factoryConfig);
         $this->assertArrayHasKey('payum.template.obtain_credit_card', $factoryConfig);
         $this->assertInstanceOf('Symfony\Component\DependencyInjection\Reference', $factoryService->getArgument(1));
-        $this->assertEquals('payum.payment_factory', (string)$factoryService->getArgument(1));
+        $this->assertEquals('payum.gateway_factory', (string)$factoryService->getArgument(1));
 
         $this->assertEquals('LocasticTcomPayWayPayumBundle:TcomPayWay/Offsite:capture.html.twig', $container->getParameter('payum.tcompayway_offsite.template.capture'));
     }
@@ -232,7 +232,7 @@ class TcomOffsitePaymentFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function shouldCallParentsCreateMethod()
     {
-        $factory = new TcomOffsitePaymentFactory;
+        $factory = new TcomOffsiteGatewayFactory;
 
         $container = new ContainerBuilder;
         $paymentId = $factory->create(

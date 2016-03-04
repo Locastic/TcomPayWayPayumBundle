@@ -7,16 +7,16 @@ use Locastic\TcomPayWayPayumBundle\Action\CaptureOffsiteAction;
 use Locastic\TcomPayWayPayumBundle\Action\FillOrderDetailsAction;
 use Locastic\TcomPayWayPayumBundle\Action\StatusAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\PaymentFactoryInterface;
-use Payum\Core\PaymentFactory as CorePaymentFactory;
+use Payum\Core\GatewayFactoryInterface;
+use Payum\Core\GatewayFactory as CoreGatewayFactory;
 
 
-class OffsitePaymentFactory implements PaymentFactoryInterface
+class OffsiteGatewayFactory implements GatewayFactoryInterface
 {
     /**
-     * @var PaymentFactoryInterface
+     * @var GatewayFactoryInterface
      */
-    protected $corePaymentFactory;
+    protected $coreGatewayFactory;
 
     /**
      * @var array
@@ -25,11 +25,11 @@ class OffsitePaymentFactory implements PaymentFactoryInterface
 
     /**
      * @param array $defaultConfig
-     * @param PaymentFactoryInterface $corePaymentFactory
+     * @param GatewayFactoryInterface $coreGatewayFactory
      */
-    public function __construct(array $defaultConfig = array(), PaymentFactoryInterface $corePaymentFactory = null)
+    public function __construct(array $defaultConfig = array(), GatewayFactoryInterface $coreGatewayFactory = null)
     {
-        $this->corePaymentFactory = $corePaymentFactory ?: new CorePaymentFactory();
+        $this->coreGatewayFactory = $coreGatewayFactory ?: new CoreGatewayFactory();
         $this->defaultConfig = $defaultConfig;
     }
 
@@ -40,7 +40,7 @@ class OffsitePaymentFactory implements PaymentFactoryInterface
     {
         $config = ArrayObject::ensureArrayObject($config);
         $config->defaults($this->defaultConfig);
-        $config->defaults($this->corePaymentFactory->createConfig((array)$config));
+        $config->defaults($this->coreGatewayFactory->createConfig((array)$config));
 
         $config->defaults(
             array(
@@ -93,6 +93,6 @@ class OffsitePaymentFactory implements PaymentFactoryInterface
      */
     public function create(array $config = array())
     {
-        return $this->corePaymentFactory->create($this->createConfig($config));
+        return $this->coreGatewayFactory->create($this->createConfig($config));
     }
 }

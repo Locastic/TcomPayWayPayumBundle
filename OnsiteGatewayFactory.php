@@ -8,10 +8,10 @@ use Locastic\TcomPayWayPayumBundle\Action\FillOrderDetailsAction;
 use Locastic\TcomPayWayPayumBundle\Action\StatusAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Bridge\Twig\TwigFactory;
-use Payum\Core\PaymentFactoryInterface;
-use Payum\Core\PaymentFactory as CorePaymentFactory;
+use Payum\Core\GatewayFactoryInterface;
+use Payum\Core\GatewayFactory as CoreGatewayFactory;
 
-class OnsitePaymentFactory extends OffsitePaymentFactory
+class OnsiteGatewayFactory extends OffsiteGatewayFactory
 {
     /**
      * {@inheritDoc}
@@ -20,7 +20,7 @@ class OnsitePaymentFactory extends OffsitePaymentFactory
     {
         $config = ArrayObject::ensureArrayObject($config);
         $config->defaults($this->defaultConfig);
-        $config->defaults($this->corePaymentFactory->createConfig((array)$config));
+        $config->defaults($this->coreGatewayFactory->createConfig((array)$config));
 
         $config->defaults(
             array(

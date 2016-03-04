@@ -1,11 +1,11 @@
 <?php
 
-namespace Locastic\TcomPayWayPayumBundle\DependencyInjection\Factory\Payment;
+namespace Locastic\TcomPayWayPayumBundle\DependencyInjection\Factory\Gateway;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Parameter;
 
-class TcomOnsitePaymentFactory extends TcomOffsitePaymentFactory
+class TcomOnsiteGatewayFactory extends TcomOffsiteGatewayFactory
 {
     /**
      * {@inheritDoc}
@@ -50,8 +50,8 @@ class TcomOnsitePaymentFactory extends TcomOffsitePaymentFactory
     /**
      * {@inheritDoc}
      */
-    protected function getPayumPaymentFactoryClass()
+    protected function getPayumGatewayFactoryClass()
     {
-        return 'Locastic\TcomPayWayPayumBundle\OnsitePaymentFactory';
+        return 'Locastic\TcomPayWayPayumBundle\OnsiteGatewayFactory';
     }
 }
