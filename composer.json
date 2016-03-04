@@ -30,9 +30,9 @@
     }
   ],
   "require": {
-    "php": ">=5.3.2",
-    "payum/payum": "~0.12",
-    "payum/payum-bundle": "~0.12",
+    "php": "^5.5.9|^7.0",
+    "payum/payum": "~1.0",
+    "payum/payum-bundle": "~1.0",
     "locastic/tcompayway": "dev-master"
   },
   "require-dev": {
