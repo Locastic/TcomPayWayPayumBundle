@@ -5,7 +5,7 @@ namespace Locastic\TcomPayWayPayumBundle\Action;
 use Locastic\TcomPayWay\AuthorizeForm\Model\Payment as Api;
 use Locastic\TcomPayWay\Helpers\CardTypeInterpreter;
 use Locastic\TcomPayWay\Helpers\ResponseCodeInterpreter;
-use Payum\Core\Action\PaymentAwareAction;
+use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
@@ -17,7 +17,7 @@ use Payum\Core\Reply\HttpPostRedirect;
 use Payum\Core\Request\RenderTemplate;
 use Symfony\Component\Form\FormBuilder;
 
-class CaptureOffsiteAction extends PaymentAwareAction implements ApiAwareInterface
+class CaptureOffsiteAction extends GatewayAwareAction implements ApiAwareInterface
 {
     /**
      * @var Api

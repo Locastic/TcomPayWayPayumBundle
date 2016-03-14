@@ -2,7 +2,7 @@
 
 namespace Locastic\TcomPayWayPayumBundle\Bridge\Sylius;
 
-use Payum\Core\Action\PaymentAwareAction;
+use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
 use Payum\Core\Request\Capture;
@@ -11,7 +11,7 @@ use Payum\Core\Security\TokenInterface;
 use Sylius\Component\Core\Model\Order;
 use Sylius\Component\Payment\Model\PaymentInterface;
 
-class CapturePaymentAction extends PaymentAwareAction
+class CapturePaymentAction extends GatewayAwareAction
 {
     /**
      * {@inheritdoc}

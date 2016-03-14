@@ -4,7 +4,7 @@ namespace Locastic\TcomPayWayPayumBundle\Action;
 
 use Locastic\TcomPayWay\AuthorizeDirect\Model\Payment as Api;
 use Locastic\TcomPayWayPayumBundle\Entity\CreditCard;
-use Payum\Core\Action\PaymentAwareAction;
+use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\ApiAwareInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;

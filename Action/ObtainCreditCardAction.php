@@ -4,7 +4,7 @@ namespace Locastic\TcomPayWayPayumBundle\Action;
 
 use Locastic\TcomPayWay\Helpers\ResponseCodeInterpreter;
 use Locastic\TcomPayWayPayumBundle\Entity\CreditCard;
-use Payum\Core\Action\PaymentAwareAction;
+use Payum\Core\Action\GatewayAwareAction;
 use Payum\Core\Bridge\Symfony\Reply\HttpResponse;
 use Payum\Core\Exception\LogicException;
 use Payum\Core\ApiAwareInterface;
@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Payum\Core\Bridge\Spl\ArrayObject;
 
-class ObtainCreditCardAction extends PaymentAwareAction
+class ObtainCreditCardAction extends GatewayAwareAction
 {
     /**
      * @var FormFactoryInterface
