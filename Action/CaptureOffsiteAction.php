@@ -63,7 +63,7 @@ class CaptureOffsiteAction extends GatewayAwareAction implements ApiAwareInterfa
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
         $httpRequest = new GetHttpRequest();
-        $this->payment->execute($httpRequest);
+        $this->gateway->execute($httpRequest);
 
         //we are back from tcomapway site so we have to just update model and complete action
         if (isset($httpRequest->request['pgw_trace_ref'])) {
@@ -96,7 +96,7 @@ class CaptureOffsiteAction extends GatewayAwareAction implements ApiAwareInterfa
                 'payment' => $this->api,
             )
         );
-        $this->payment->execute($renderTemplate);
+        $this->gateway->execute($renderTemplate);
 
         throw new HttpResponse($renderTemplate->getResult());
     }

@@ -90,7 +90,7 @@ class ObtainCreditCardAction extends GatewayAwareAction
                 'form' => $form->createView(),
             )
         );
-        $this->payment->execute($renderTemplate);
+        $this->gateway->execute($renderTemplate);
 
         throw new HttpResponse(
             new Response(

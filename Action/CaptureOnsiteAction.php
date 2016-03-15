@@ -45,7 +45,7 @@ class CaptureOnsiteAction extends CaptureOffsiteAction
         $httpCardError = null;
 
         $httpRequest = new GetHttpRequest();
-        $this->payment->execute($httpRequest);
+        $this->gateway->execute($httpRequest);
 
         //we are back from tcomapway site so we have to just update model and complete action
         if (isset($httpRequest->request['pgw_trace_ref'])) {
@@ -83,7 +83,7 @@ class CaptureOnsiteAction extends CaptureOffsiteAction
             try {
                 $creditCardRequest = new ObtainCreditCard();
                 $creditCardRequest->setModel($model);
-                $this->payment->execute($creditCardRequest);
+                $this->gateway->execute($creditCardRequest);
                 /** @var CreditCard $card */
                 $card = $creditCardRequest->obtain();
 
@@ -132,7 +132,7 @@ class CaptureOnsiteAction extends CaptureOffsiteAction
                 'payment' => $this->api,
             )
         );
-        $this->payment->execute($renderTemplate);
+        $this->gateway->execute($renderTemplate);
 
         throw new HttpResponse($renderTemplate->getResult());
     }
