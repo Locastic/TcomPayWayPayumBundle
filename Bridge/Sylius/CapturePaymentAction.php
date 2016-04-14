@@ -75,8 +75,8 @@ class CapturePaymentAction extends GatewayAwareAction
         $details['pgwStreet'] = $order->getBillingAddress()->getStreet();
         $details['pgwCity'] = $order->getBillingAddress()->getCity();
         $details['pgwPostCode'] = $order->getBillingAddress()->getPostCode();
-        if($order->getBillingAddress()->getCountry()) {
-            $details['pgwCountry'] = $order->getBillingAddress()->getCountry()->getIsoName();
+        if($order->getBillingAddress()->getCountryCode()) {
+            $details['pgwCountry'] = $order->getBillingAddress()->getCountryCode();
         }
         $details['pgwPhoneNumber'] = $order->getBillingAddress()->getPhoneNumber();
         $details['pgwEmail'] = $order->getUser()->getEmail();
