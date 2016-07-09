@@ -49,7 +49,9 @@ class StatusAction implements ActionInterface, ApiAwareInterface
         $statusCode = $model['tcompayway_response']['pgw_result_code'];
 
         if (0 == $statusCode && 0 == $this->api->getPgwAuthorizationType()) {
-            $request->markAuthorized();
+            // because Sylius doesnt recognize authorized payment state we mark it as captured
+            //$request->markAuthorized();
+            $request->markCaptured();
 
             return;
         }
