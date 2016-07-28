@@ -60,7 +60,7 @@ class TcomPayWayOffsiteGatewayFactory extends GatewayFactory
         }
 
         $config['payum.paths'] = array_replace([
-            'LocasticTcomPayWayOffsite' => __DIR__.'/Resources/views/Offsite',
+            'LocasticTcomPayWayOffsite' => __DIR__.'/Resources/views/TcomPayWay/Offsite',
         ], $config['payum.paths'] ?: []);
     }
 }

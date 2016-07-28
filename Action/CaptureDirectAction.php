@@ -51,7 +51,7 @@ class CaptureDirectAction extends CaptureOffsiteAction
                     $creditCardErrors
                 )
             ) {
-                $model['tcompayway_response'] = $this->checkandUpdateReponse($httpRequest->request);
+                $model['tcompayway_response'] = $this->checkAndUpdateResponse($httpRequest->request);
 
                 return;
             }
@@ -120,12 +120,7 @@ class CaptureDirectAction extends CaptureOffsiteAction
         $this->api->setPgwEmail($card->getEmail());
 
         // render template and process payment
-
-        $renderTemplate = new RenderTemplate(
-            $this->templateName, array(
-                'payment' => $this->api,
-            )
-        );
+        $renderTemplate = new RenderTemplate($this->templateName, ['payment' => $this->api]);
         $this->gateway->execute($renderTemplate);
 
         throw new HttpResponse($renderTemplate->getResult());

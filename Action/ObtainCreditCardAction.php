@@ -4,33 +4,35 @@ namespace Locastic\TcomPayWayPayumBundle\Action;
 
 use Locastic\TcomPayWay\Helpers\ResponseCodeInterpreter;
 use Locastic\TcomPayWayPayumBundle\Entity\CreditCard;
-use Payum\Core\Action\GatewayAwareAction;
+use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Symfony\Reply\HttpResponse;
 use Payum\Core\Exception\LogicException;
-use Payum\Core\ApiAwareInterface;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Core\Exception\UnsupportedApiException;
+use Payum\Core\GatewayAwareInterface;
+use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Model\CreditCardInterface;
-use Locastic\TcomPayWayPayumBundle\Request\ObtainCreditCard;
+use Payum\Core\Request\ObtainCreditCard;
 use Payum\Core\Request\RenderTemplate;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Payum\Core\Bridge\Spl\ArrayObject;
 
-class ObtainCreditCardAction extends GatewayAwareAction
+class ObtainCreditCardAction implements ActionInterface, GatewayAwareInterface
 {
+    use GatewayAwareTrait;
+
     /**
      * @var FormFactoryInterface
      */
     protected $formFactory;
 
     /**
-     * @var Request
+     * @var RequestStack
      */
-    protected $httpRequest;
+    protected $httpRequestStack;
 
     /**
      * @var string
@@ -48,29 +50,33 @@ class ObtainCreditCardAction extends GatewayAwareAction
     }
 
     /**
-     * @param Request $request
+     * @param RequestStack|null $httpRequestStack
      */
-    public function setRequest(Request $request = null)
+    public function setRequestStack(RequestStack $httpRequestStack = null)
     {
-        $this->httpRequest = $request;
+        $this->httpRequestStack = $httpRequestStack;
     }
 
     /**
      * {@inheritDoc}
+     *
+     * @param ObtainCreditCard $request
      */
     public function execute($request)
     {
-        /** @var $request ObtainCreditCard */
-        if (!$this->supports($request)) {
-            throw RequestNotSupportedException::createActionNotSupported($this, $request);
+        RequestNotSupportedException::assertSupports($this, $request);
+
+        if (!$this->httpRequestStack) {
+            throw new LogicException('The request stack is not set.');
         }
-        if (!$this->httpRequest) {
-            throw new LogicException('The action can be run only when http request is set.');
+
+        if ($httpRequest = $this->httpRequestStack->getMasterRequest()) {
+            throw new LogicException('The action can be run only when http master request is set.');
         }
 
         $form = $this->createCreditCardForm($request->getModel());
 
-        $form->handleRequest($this->httpRequest);
+        $form->handleRequest($httpRequest);
         if ($form->isSubmitted()) {
             /** @var CreditCardInterface $card */
             $card = $form->getData();
@@ -92,14 +98,10 @@ class ObtainCreditCardAction extends GatewayAwareAction
         );
         $this->gateway->execute($renderTemplate);
 
-        throw new HttpResponse(
-            new Response(
-                $renderTemplate->getResult(), 200, array(
-                    'Cache-Control' => 'no-store, no-cache, max-age=0, post-check=0, pre-check=0',
-                    'Pragma' => 'no-cache',
-                )
-            )
-        );
+        throw new HttpResponse(new Response($renderTemplate->getResult(), 200, [
+            'Cache-Control' => 'no-store, no-cache, max-age=0, post-check=0, pre-check=0',
+            'Pragma' => 'no-cache',
+        ]));
     }
 
     /**
@@ -107,7 +109,7 @@ class ObtainCreditCardAction extends GatewayAwareAction
      */
     public function supports($request)
     {
-        return $request instanceof ObtainCreditCard;
+        return $request instanceof ObtainCreditCard && $request->getModel() instanceof \ArrayAccess;
     }
 
     /**

@@ -55,7 +55,7 @@ class CaptureOffsiteAction implements ActionInterface, GatewayAwareInterface, Ap
 
         //we are back from tcomapway site so we have to just update model and complete action
         if (isset($httpRequest->request['pgw_trace_ref'])) {
-            $model['tcompayway_response'] = $this->checkandUpdateReponse($httpRequest->request);
+            $model['tcompayway_response'] = $this->checkAndUpdateResponse($httpRequest->request);
 
             return;
         }
@@ -94,12 +94,10 @@ class CaptureOffsiteAction implements ActionInterface, GatewayAwareInterface, Ap
      */
     public function supports($request)
     {
-        return
-            $request instanceof Capture &&
-            $request->getModel() instanceof \ArrayAccess;
+        return $request instanceof Capture && $request->getModel() instanceof \ArrayAccess;
     }
 
-    protected function checkandUpdateReponse($pgwResponse)
+    protected function checkAndUpdateResponse($pgwResponse)
     {
         if (!$this->api->isPgwResponseValid($pgwResponse)) {
             throw new RequestNotSupportedException('Not valid PGW Response');

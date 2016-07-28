@@ -3,6 +3,7 @@
 namespace Locastic\TcomPayWayPayumBundle\Controller;
 
 use Locastic\TcomPayWay\AuthorizeForm\Model\Payment;
+use Payum\Core\Payum;
 use Payum\Core\Request\GetHumanStatus;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -13,9 +14,9 @@ class OnsiteController extends Controller
 {
     public function prepareAction()
     {
-        $paymentName = 'tcompayway_onsite';
+        $gatewayName = 'tcompayway_onsite';
 
-        $storage = $this->get('payum')->getStorage('Locastic\TcomPayWayPayumBundle\Entity\Payment');
+        $storage = $this->getPayum()->getStorage(Payment::class);
 
         $payment = $storage->create();
         $payment->setNumber(uniqid());
@@ -27,8 +28,8 @@ class OnsiteController extends Controller
 
         $storage->update($payment);
 
-        $captureToken = $this->get('payum.security.token_factory')->createCaptureToken(
-            $paymentName,
+        $captureToken = $this->getPayum()->getTokenFactory()->createCaptureToken(
+            $gatewayName,
             $payment,
             'locastic_tcompaywaypayum_onsite_capture_done' // the route to redirect after capture
         );
@@ -38,9 +39,9 @@ class OnsiteController extends Controller
 
     public function captureDoneAction(Request $request)
     {
-        $token = $this->get('payum.security.http_request_verifier')->verify($request);
+        $token = $this->getPayum()->getHttpRequestVerifier()->verify($request);
 
-        $payment = $this->get('payum')->getPayment($token->getPaymentName());
+        $payment = $this->getPayum()->getGateway($token->getGatewayName());
 
         // you can invalidate the token. The url could not be requested any more.
         // $this->get('payum.security.http_request_verifier')->invalidate($token);
@@ -66,5 +67,13 @@ class OnsiteController extends Controller
                 ),
             )
         );
+    }
+
+    /**
+     * @return Payum
+     */
+    private function getPayum()
+    {
+        return $this->get('payum');
     }
 }
