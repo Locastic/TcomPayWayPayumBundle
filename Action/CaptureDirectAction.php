@@ -4,32 +4,26 @@ namespace Locastic\TcomPayWayPayumBundle\Action;
 
 use Locastic\TcomPayWay\AuthorizeDirect\Model\Payment as Api;
 use Locastic\TcomPayWayPayumBundle\Entity\CreditCard;
-use Payum\Core\Action\GatewayAwareAction;
-use Payum\Core\ApiAwareInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\GetHttpRequest;
-use Payum\Core\Reply\HttpPostRedirect;
 use Payum\Core\Exception\LogicException;
 use Locastic\TcomPayWayPayumBundle\Request\ObtainCreditCard;
 use Payum\Core\Request\RenderTemplate;
 use Payum\Core\Security\SensitiveValue;
 
-class CaptureOnsiteAction extends CaptureOffsiteAction
+/**
+ * @property Api $api
+ */
+class CaptureDirectAction extends CaptureOffsiteAction
 {
-    /**
-     * {@inheritDoc}
-     */
-    public function setApi($api)
+    public function __construct($templateName)
     {
-        if (false === $api instanceof Api) {
-            throw new UnsupportedApiException('Not supported.');
-        }
+        parent::__construct($templateName);
 
-        $this->api = $api;
+        $this->apiClass = Api::class;
     }
 
     /**

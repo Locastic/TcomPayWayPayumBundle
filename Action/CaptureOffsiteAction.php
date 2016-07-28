@@ -5,24 +5,25 @@ namespace Locastic\TcomPayWayPayumBundle\Action;
 use Locastic\TcomPayWay\AuthorizeForm\Model\Payment as Api;
 use Locastic\TcomPayWay\Helpers\CardTypeInterpreter;
 use Locastic\TcomPayWay\Helpers\ResponseCodeInterpreter;
-use Payum\Core\Action\GatewayAwareAction;
+use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
+use Payum\Core\ApiAwareTrait;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Core\Exception\UnsupportedApiException;
+use Payum\Core\GatewayAwareInterface;
+use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\GetHttpRequest;
-use Payum\Core\Reply\HttpPostRedirect;
 use Payum\Core\Request\RenderTemplate;
-use Symfony\Component\Form\FormBuilder;
 
-class CaptureOffsiteAction extends GatewayAwareAction implements ApiAwareInterface
+/**
+ * @property Api $api
+ */
+class CaptureOffsiteAction implements ActionInterface, GatewayAwareInterface, ApiAwareInterface
 {
-    /**
-     * @var Api
-     */
-    protected $api;
+    use ApiAwareTrait;
+    use GatewayAwareTrait;
 
     /**
      * @var string
@@ -30,25 +31,12 @@ class CaptureOffsiteAction extends GatewayAwareAction implements ApiAwareInterfa
     protected $templateName;
 
     /**
-     * CaptureOffsiteAction constructor.
      * @param string $templateName
      */
     public function __construct($templateName)
     {
         $this->templateName = $templateName;
-    }
-
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setApi($api)
-    {
-        if (false === $api instanceof Api) {
-            throw new UnsupportedApiException('Not supported.');
-        }
-
-        $this->api = $api;
+        $this->apiClass = Api::class;
     }
 
     /**

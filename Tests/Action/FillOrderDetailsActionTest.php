@@ -1,7 +1,7 @@
 <?php
 namespace Locastic\TcomPayWayPayumBundle\Tests\Action;
 
-use Locastic\TcomPayWayPayumBundle\Action\FillOrderDetailsAction;
+use Locastic\TcomPayWayPayumBundle\Action\ConvertPaymentAction;
 use Payum\Core\Model\Order;
 use Payum\Core\Request\FillOrderDetails;
 use Payum\Core\Tests\GenericActionTest;
@@ -44,7 +44,7 @@ class FillOrderDetailsActionTest extends GenericActionTest
         $order->setClientId('theClientId');
         $order->setClientEmail('theClientEmail');
 
-        $action = new FillOrderDetailsAction();
+        $action = new ConvertPaymentAction();
 
         $action->execute(new FillOrderDetails($order));
 
@@ -75,7 +75,7 @@ class FillOrderDetailsActionTest extends GenericActionTest
             'foo' => 'fooVal',
         ));
 
-        $action = new FillOrderDetailsAction();
+        $action = new ConvertPaymentAction();
 
         $action->execute(new FillOrderDetails($order));
 

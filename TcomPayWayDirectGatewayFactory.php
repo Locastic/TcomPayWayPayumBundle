@@ -3,34 +3,37 @@
 namespace Locastic\TcomPayWayPayumBundle;
 
 use Locastic\TcomPayWay\AuthorizeDirect\Model\Payment as PaymentOnsite;
-use Locastic\TcomPayWayPayumBundle\Action\CaptureOnsiteAction;
-use Locastic\TcomPayWayPayumBundle\Action\FillOrderDetailsAction;
+use Locastic\TcomPayWayPayumBundle\Action\CaptureDirectAction;
+use Locastic\TcomPayWayPayumBundle\Action\ConvertPaymentAction;
+use Locastic\TcomPayWayPayumBundle\Action\ObtainCreditCardAction;
 use Locastic\TcomPayWayPayumBundle\Action\StatusAction;
 use Payum\Core\Bridge\Spl\ArrayObject;
-use Payum\Core\Bridge\Twig\TwigFactory;
-use Payum\Core\GatewayFactoryInterface;
-use Payum\Core\GatewayFactory as CoreGatewayFactory;
+use Payum\Core\GatewayFactory;
 
-class OnsiteGatewayFactory extends OffsiteGatewayFactory
+class TcomPayWayDirectGatewayFactoryTcomPayWay extends GatewayFactory
 {
     /**
      * {@inheritDoc}
      */
-    public function createConfig(array $config = array())
+    protected function populateConfig(ArrayObject $config)
     {
         $config = ArrayObject::ensureArrayObject($config);
         $config->defaults($this->defaultConfig);
         $config->defaults($this->coreGatewayFactory->createConfig((array)$config));
 
-        $config->defaults(
-            array(
-                'payum.factory_name' => 'tcompayway_onsite',
-                'payum.factory_title' => 'TcomPayWay Onsite',
-                'payum.action.capture' => new CaptureOnsiteAction($config['payum.tcompayway_onsite.template.capture']),
-                'payum.action.status' => new StatusAction(),
-                'payum.action.fill_order_details' => new FillOrderDetailsAction(),
-            )
-        );
+        $config->defaults([
+            'payum.tcompayway.template.capture' => '@LocasticTcomPayWayDirect/capture.html.twig',
+            'payum.tcompayway.template.obtain_credit_card' => '@LocasticTcomPayWayDirect/obtainCreditCard.html.twig',
+
+            'payum.factory_name' => 'tcompayway_direct',
+            'payum.factory_title' => 'TcomPayWay Direct',
+            'payum.action.capture' => new CaptureDirectAction($config['payum.tcompayway.template.capture']),
+            'payum.action.status' => new StatusAction(),
+            'payum.action.convert_payment' => new ConvertPaymentAction(),
+            'payum.action.obtain_credit_card' => function (ArrayObject $config) {
+                return new ObtainCreditCardAction();
+            }
+        ]);
 
         if (false == $config['payum.api']) {
             $config['payum.default_options'] = array(
@@ -71,6 +74,8 @@ class OnsiteGatewayFactory extends OffsiteGatewayFactory
             };
         }
 
-        return (array)$config;
+        $config['payum.paths'] = array_replace([
+            'LocasticTcomPayWayDirect' => __DIR__.'/Resources/views/Direct',
+        ], $config['payum.paths'] ?: []);
     }
 }
