@@ -32,7 +32,9 @@ class TcomPayWayDirectGatewayFactory extends GatewayFactory
 
             'payum.factory_name' => 'tcompayway_direct',
             'payum.factory_title' => 'TcomPayWay Direct',
-            'payum.action.capture' => new CaptureDirectAction($config['payum.tcompayway.template.capture']),
+            'payum.action.capture' => function(ArrayObject $config) {
+                return new CaptureDirectAction($config['payum.tcompayway.template.capture']);
+            },
             'payum.action.status' => new StatusAction(),
             'payum.action.convert_payment' => new ConvertPaymentAction(),
             'payum.action.tcompayway_obtain_credit_card' => function(ArrayObject $config) {
@@ -53,11 +55,10 @@ class TcomPayWayDirectGatewayFactory extends GatewayFactory
 
         if (false == $config['payum.api']) {
             $config['payum.default_options'] = array(
-                'shop_id' => '',
-                'shop_username' => null,
-                'shop_password' => null,
-                'shop_secret_key' => null,
                 'shop_name' => null, # this will be used in transaction description in user's bank account transactions
+                'shop_id' => '',
+                'username' => null,
+                'password' => null,
                 'secret_key' => '',
                 'authorization_type' => '0',
                 'sandbox' => true,
@@ -66,9 +67,8 @@ class TcomPayWayDirectGatewayFactory extends GatewayFactory
             $config->defaults($config['payum.default_options']);
             $config['payum.required_options'] = array(
                 'shop_id',
-                'shop_username',
-                'shop_password',
-                'shop_secret_key',
+                'username',
+                'password',
                 'secret_key',
             );
             $config['payum.api'] = function (ArrayObject $config) {
@@ -100,10 +100,10 @@ class TcomPayWayDirectGatewayFactory extends GatewayFactory
             $config['payum.api.authorization'] = function (ArrayObject $config) {
                 $config->validateNotEmpty($config['payum.required_options']);
                 $api = new Api(
-                    $config['shop_username'],
-                    $config['shop_password'],
+                    $config['username'],
+                    $config['password'],
                     $config['shop_id'],
-                    $config['shop_secret_key'],
+                    $config['secret_key'],
                     $config['authorization_type'],
                     $config['sandbox']
                 );

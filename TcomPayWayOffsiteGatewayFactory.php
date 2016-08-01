@@ -21,7 +21,9 @@ class TcomPayWayOffsiteGatewayFactory extends GatewayFactory
 
             'payum.factory_name' => 'tcompayway_offsite',
             'payum.factory_title' => 'TcomPayWay Offsite',
-            'payum.action.capture' => new CaptureOffsiteAction($config['payum.tcompayway.template.capture']),
+            'payum.action.capture' => function (ArrayObject $config) {
+                return new CaptureOffsiteAction($config['payum.tcompayway.template.capture']);
+            },
             'payum.action.status' => new StatusAction(),
             'payum.action.fill_order_details' => new ConvertPaymentAction(),
         ]);

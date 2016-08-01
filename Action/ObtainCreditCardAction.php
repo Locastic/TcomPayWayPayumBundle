@@ -4,6 +4,7 @@ namespace Locastic\TcomPayWayPayumBundle\Action;
 
 use Locastic\TcomPayWay\Helpers\ResponseCodeInterpreter;
 use Locastic\TcomPayWayPayumBundle\Entity\CreditCard;
+use Locastic\TcomPayWayPayumBundle\Form\Type\CreditCardType;
 use Payum\Core\Action\ActionInterface;
 use Payum\Core\Bridge\Symfony\Reply\HttpResponse;
 use Payum\Core\Exception\LogicException;
@@ -70,7 +71,7 @@ class ObtainCreditCardAction implements ActionInterface, GatewayAwareInterface
             throw new LogicException('The request stack is not set.');
         }
 
-        if ($httpRequest = $this->httpRequestStack->getMasterRequest()) {
+        if (!$httpRequest = $this->httpRequestStack->getMasterRequest()) {
             throw new LogicException('The action can be run only when http master request is set.');
         }
 
@@ -117,7 +118,7 @@ class ObtainCreditCardAction implements ActionInterface, GatewayAwareInterface
      */
     protected function createCreditCardForm(ArrayObject $model)
     {
-        return $this->formFactory->create('payum_credit_card', $this->setInitialCreditCardData($model));
+        return $this->formFactory->create(CreditCardType::class, $this->setInitialCreditCardData($model));
     }
 
     protected function setInitialCreditCardData(ArrayObject $model)

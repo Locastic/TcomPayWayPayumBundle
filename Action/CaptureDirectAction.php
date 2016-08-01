@@ -10,7 +10,7 @@ use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\GetHttpRequest;
 use Payum\Core\Exception\LogicException;
-use Locastic\TcomPayWayPayumBundle\Request\ObtainCreditCard;
+use Payum\Core\Request\ObtainCreditCard;
 use Payum\Core\Request\RenderTemplate;
 use Payum\Core\Security\SensitiveValue;
 

@@ -2,7 +2,7 @@
 
 namespace Locastic\TcomPayWayPayumBundle\Controller;
 
-use Locastic\TcomPayWay\AuthorizeForm\Model\Payment;
+use Locastic\TcomPayWayPayumBundle\Entity\Payment;
 use Payum\Core\Payum;
 use Payum\Core\Request\GetHumanStatus;
 use Symfony\Component\HttpFoundation\Request;

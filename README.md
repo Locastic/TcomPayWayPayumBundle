@@ -38,11 +38,10 @@ payum:
     gateways:
         tcompayway:
             factory: tcompayway_direct # or tcompayway_direct
-            shop_id: EDITME
-            shop_username: EDITME
-            shop_password: EDITME
             shop_name: EDITME
-            shop_secret_key: EDITME
+            shop_id: EDITME
+            username: EDITME
+            password: EDITME
             secret_key: EDITME
             authorization_type: EDITME
             sandbox: true
