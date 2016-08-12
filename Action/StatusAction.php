@@ -2,41 +2,34 @@
 
 namespace Locastic\TcomPayWayPayumBundle\Action;
 
+use Locastic\TcomPayWay\Model\Payment;
+use Locastic\TcomPayWay\Model\PaymentInterface;
 use Payum\Core\Action\ActionInterface;
+use Payum\Core\ApiAwareTrait;
 use Payum\Core\Request\GetStatusInterface;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Locastic\TcomPayWay\AuthorizeDirect\Model\Payment as OnsiteApi;
-use Locastic\TcomPayWay\AuthorizeForm\Model\Payment as OffsiteApi;
 use Payum\Core\ApiAwareInterface;
-use Payum\Core\Exception\UnsupportedApiException;
 
+/**
+ * @property Payment $api
+ */
 class StatusAction implements ActionInterface, ApiAwareInterface
 {
-    /** @var  mixed */
-    protected $api;
+    use ApiAwareTrait;
 
-    /**
-     * {@inheritDoc}
-     */
-    public function setApi($api)
+    public function __construct()
     {
-        if (false == $api instanceof OnsiteApi && false == $api instanceof OffsiteApi) {
-            throw new UnsupportedApiException('Not supported.');
-        }
-
-        $this->api = $api;
+        $this->apiClass = Payment::class;
     }
 
     /**
      * {@inheritDoc}
+     *
+     * @param GetStatusInterface $request
      */
     public function execute($request)
     {
-
-        /** @var $request GetStatusInterface */
-        if (false == $this->supports($request)) {
-            throw RequestNotSupportedException::createActionNotSupported($this, $request);
-        }
+        RequestNotSupportedException::assertSupports($this, $request);
 
         $model = $request->getModel();
 
@@ -49,7 +42,9 @@ class StatusAction implements ActionInterface, ApiAwareInterface
         $statusCode = $model['tcompayway_response']['pgw_result_code'];
 
         if (0 == $statusCode && 0 == $this->api->getPgwAuthorizationType()) {
-            $request->markAuthorized();
+            // because Sylius doesnt recognize authorized payment state we mark it as captured
+            //$request->markAuthorized();
+            $request->markCaptured();
 
             return;
         }

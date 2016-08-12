@@ -1,53 +1,21 @@
 <?xml version="1.0" ?>
 
-<container xmlns="http://symfony.com/schema/dic/services"
-           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
-
-    <parameters>
-        <parameter key="locastic.tcompayway.payum.form.type.credit_card.class">Locastic\TcomPayWayPayumBundle\Form\Type\CreditCardType</parameter>
-        <parameter key="locastic.tcompayway.payum.action.obtain_credit_card.class">Locastic\TcomPayWayPayumBundle\Action\ObtainCreditCardAction</parameter>
-        <parameter key="locastic.tcompayway.api.class">Locastic\TcomPayWay\AuthorizeDirect\Api</parameter>
-    </parameters>
-
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="locastic.tcompayway.payum.form.type.credit_card" class="%locastic.tcompayway.payum.form.type.credit_card.class%">
-            <tag name="form.type" alias="payum_credit_card" factory="tcompayway_onsite"/>
+        <service id="locastic.tcompayway.payum.form.type.credit_card" class="Locastic\TcomPayWayPayumBundle\Form\Type\CreditCardType">
+            <tag name="form.type" />
         </service>
 
-        <service id="locastic.tcompayway.payum.action.obtain_credit_card" class="%locastic.tcompayway.payum.action.obtain_credit_card.class%">
-            <argument type="service" id="form.factory"/>
-            <argument>%payum.tcompayway_onsite.template.obtain_credit_card%</argument>
-            <call method="setRequest">
-                <argument type="service" id="request" on-invalid="null" strict="false"/>
-            </call>
-            <tag name="payum.action" alias="obtain_credit_card" factory="tcompayway_onsite"/>
+        <service id="locastic.tcompayway.direct_gateway_factory" class="Payum\Core\Bridge\Symfony\Builder\GatewayFactoryBuilder">
+            <argument>Locastic\TcomPayWayPayumBundle\TcomPayWayDirectGatewayFactory</argument>
+
+            <tag name="payum.gateway_factory_builder" factory="tcompayway_direct" />
         </service>
 
-        <service id="locastic.tcompayway.api" class="%locastic.tcompayway.api.class%">
-            <argument>%tcompayway.username%</argument>
-            <argument>%tcompayway.password%</argument>
-            <argument>%tcompayway.shop_id%</argument>
-            <argument>%tcompayway.secret_key%</argument>
-            <argument>%tcompayway.authorization_type%</argument>
-            <argument>%tcompayway.sandbox%</argument>
+        <service id="locastic.tcompayway.offsite_gateway_factory" class="Payum\Core\Bridge\Symfony\Builder\GatewayFactoryBuilder">
+            <argument>Locastic\TcomPayWayPayumBundle\TcomPayWayOffsiteGatewayFactory</argument>
+
+            <tag name="payum.gateway_factory_builder" factory="tcompayway_offsite" />
         </service>
-
-        <!--  sylius bridges -->
-        <!--<service id="sylius.payum.tcompwayway_offsite.action.capture_payment_offsite" class="Locastic\TcomPayWayPayumBundle\Bridge\Sylius\CapturePaymentAction">-->
-            <!--<tag name="payum.action" factory="tcompayway_offsite" alias="capture_sylius_order" prepend="true"/>-->
-            <!--<tag name="payum.action" factory="tcompayway_onsite" alias="capture_sylius_order" prepend="true"/>-->
-        <!--</service>-->
-
-        <!--<service id="sylius.payum.tcompayway.action.notify" class="Locastic\TcomPayWayPayumBundle\Bridge\Sylius\PaymentStatusAction">-->
-            <!--&lt;!&ndash;<argument type="service" id="sylius.repository.payment" />&ndash;&gt;-->
-            <!--<argument type="service" id="sylius.manager.payment" />-->
-            <!--<argument type="service" id="sm.factory" />-->
-
-            <!--<tag name="payum.action" factory="tcompayway_offsite" alias="notify_sylius_order" prepend="true"/>-->
-            <!--<tag name="payum.action" factory="tcompayway_onsite" alias="notify_sylius_order"/>-->
-        <!--</service>-->
     </services>
-
-
 </container>

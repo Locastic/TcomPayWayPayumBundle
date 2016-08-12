@@ -4,32 +4,26 @@ namespace Locastic\TcomPayWayPayumBundle\Action;
 
 use Locastic\TcomPayWay\AuthorizeDirect\Model\Payment as Api;
 use Locastic\TcomPayWayPayumBundle\Entity\CreditCard;
-use Payum\Core\Action\PaymentAwareAction;
-use Payum\Core\ApiAwareInterface;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Core\Exception\UnsupportedApiException;
 use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\GetHttpRequest;
-use Payum\Core\Reply\HttpPostRedirect;
 use Payum\Core\Exception\LogicException;
-use Locastic\TcomPayWayPayumBundle\Request\ObtainCreditCard;
+use Payum\Core\Request\ObtainCreditCard;
 use Payum\Core\Request\RenderTemplate;
 use Payum\Core\Security\SensitiveValue;
 
-class CaptureOnsiteAction extends CaptureOffsiteAction
+/**
+ * @property Api $api
+ */
+class CaptureDirectAction extends CaptureOffsiteAction
 {
-    /**
-     * {@inheritDoc}
-     */
-    public function setApi($api)
+    public function __construct($templateName)
     {
-        if (false === $api instanceof Api) {
-            throw new UnsupportedApiException('Not supported.');
-        }
+        parent::__construct($templateName);
 
-        $this->api = $api;
+        $this->apiClass = Api::class;
     }
 
     /**
@@ -45,7 +39,7 @@ class CaptureOnsiteAction extends CaptureOffsiteAction
         $httpCardError = null;
 
         $httpRequest = new GetHttpRequest();
-        $this->payment->execute($httpRequest);
+        $this->gateway->execute($httpRequest);
 
         //we are back from tcomapway site so we have to just update model and complete action
         if (isset($httpRequest->request['pgw_trace_ref'])) {
@@ -57,7 +51,7 @@ class CaptureOnsiteAction extends CaptureOffsiteAction
                     $creditCardErrors
                 )
             ) {
-                $model['tcompayway_response'] = $this->checkandUpdateReponse($httpRequest->request);
+                $model['tcompayway_response'] = $this->checkAndUpdateResponse($httpRequest->request);
 
                 return;
             }
@@ -83,7 +77,7 @@ class CaptureOnsiteAction extends CaptureOffsiteAction
             try {
                 $creditCardRequest = new ObtainCreditCard();
                 $creditCardRequest->setModel($model);
-                $this->payment->execute($creditCardRequest);
+                $this->gateway->execute($creditCardRequest);
                 /** @var CreditCard $card */
                 $card = $creditCardRequest->obtain();
 
@@ -126,13 +120,8 @@ class CaptureOnsiteAction extends CaptureOffsiteAction
         $this->api->setPgwEmail($card->getEmail());
 
         // render template and process payment
-
-        $renderTemplate = new RenderTemplate(
-            $this->templateName, array(
-                'payment' => $this->api,
-            )
-        );
-        $this->payment->execute($renderTemplate);
+        $renderTemplate = new RenderTemplate($this->templateName, ['payment' => $this->api]);
+        $this->gateway->execute($renderTemplate);
 
         throw new HttpResponse($renderTemplate->getResult());
     }

@@ -2,9 +2,9 @@
 
 namespace Locastic\TcomPayWayPayumBundle\Form\Type;
 
-use Symfony\Component\Form\AbstractType;
+use Locastic\TcomPayWayPayumBundle\Entity\CreditCard;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Payum\Core\Bridge\Symfony\Form\Type\CreditCardType as BaseCreditCardType;
 
 class CreditCardType extends BaseCreditCardType
@@ -40,21 +40,15 @@ class CreditCardType extends BaseCreditCardType
     /**
      * {@inheritDoc}
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver
-            ->setDefaults(
-                array(
-                    'data_class' => 'Locastic\TcomPayWayPayumBundle\Entity\CreditCard',
-                    'validation_groups' => array('Locastic'),
-                    'label' => false,
-                    'translation_domain' => 'TcomPayWayPayumBundle',
-                )
-            );
-    }
-
-    public function getName()
-    {
-        return 'payum_credit_card';
+            ->setDefaults([
+                'data_class' => CreditCard::class,
+                'validation_groups' => ['Locastic'],
+                'label' => false,
+                'translation_domain' => 'TcomPayWayPayumBundle',
+            ])
+        ;
     }
 }

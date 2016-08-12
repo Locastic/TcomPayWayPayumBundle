@@ -5,24 +5,25 @@ namespace Locastic\TcomPayWayPayumBundle\Action;
 use Locastic\TcomPayWay\AuthorizeForm\Model\Payment as Api;
 use Locastic\TcomPayWay\Helpers\CardTypeInterpreter;
 use Locastic\TcomPayWay\Helpers\ResponseCodeInterpreter;
-use Payum\Core\Action\PaymentAwareAction;
+use Payum\Core\Action\ActionInterface;
 use Payum\Core\ApiAwareInterface;
+use Payum\Core\ApiAwareTrait;
 use Payum\Core\Bridge\Spl\ArrayObject;
 use Payum\Core\Exception\RequestNotSupportedException;
-use Payum\Core\Exception\UnsupportedApiException;
+use Payum\Core\GatewayAwareInterface;
+use Payum\Core\GatewayAwareTrait;
 use Payum\Core\Reply\HttpResponse;
 use Payum\Core\Request\Capture;
 use Payum\Core\Request\GetHttpRequest;
-use Payum\Core\Reply\HttpPostRedirect;
 use Payum\Core\Request\RenderTemplate;
-use Symfony\Component\Form\FormBuilder;
 
-class CaptureOffsiteAction extends PaymentAwareAction implements ApiAwareInterface
+/**
+ * @property Api $api
+ */
+class CaptureOffsiteAction implements ActionInterface, GatewayAwareInterface, ApiAwareInterface
 {
-    /**
-     * @var Api
-     */
-    protected $api;
+    use ApiAwareTrait;
+    use GatewayAwareTrait;
 
     /**
      * @var string
@@ -30,25 +31,12 @@ class CaptureOffsiteAction extends PaymentAwareAction implements ApiAwareInterfa
     protected $templateName;
 
     /**
-     * CaptureOffsiteAction constructor.
      * @param string $templateName
      */
     public function __construct($templateName)
     {
         $this->templateName = $templateName;
-    }
-
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setApi($api)
-    {
-        if (false === $api instanceof Api) {
-            throw new UnsupportedApiException('Not supported.');
-        }
-
-        $this->api = $api;
+        $this->apiClass = Api::class;
     }
 
     /**
@@ -63,11 +51,11 @@ class CaptureOffsiteAction extends PaymentAwareAction implements ApiAwareInterfa
         $model = ArrayObject::ensureArrayObject($request->getModel());
 
         $httpRequest = new GetHttpRequest();
-        $this->payment->execute($httpRequest);
+        $this->gateway->execute($httpRequest);
 
         //we are back from tcomapway site so we have to just update model and complete action
         if (isset($httpRequest->request['pgw_trace_ref'])) {
-            $model['tcompayway_response'] = $this->checkandUpdateReponse($httpRequest->request);
+            $model['tcompayway_response'] = $this->checkAndUpdateResponse($httpRequest->request);
 
             return;
         }
@@ -96,7 +84,7 @@ class CaptureOffsiteAction extends PaymentAwareAction implements ApiAwareInterfa
                 'payment' => $this->api,
             )
         );
-        $this->payment->execute($renderTemplate);
+        $this->gateway->execute($renderTemplate);
 
         throw new HttpResponse($renderTemplate->getResult());
     }
@@ -106,12 +94,10 @@ class CaptureOffsiteAction extends PaymentAwareAction implements ApiAwareInterfa
      */
     public function supports($request)
     {
-        return
-            $request instanceof Capture &&
-            $request->getModel() instanceof \ArrayAccess;
+        return $request instanceof Capture && $request->getModel() instanceof \ArrayAccess;
     }
 
-    protected function checkandUpdateReponse($pgwResponse)
+    protected function checkAndUpdateResponse($pgwResponse)
     {
         if (!$this->api->isPgwResponseValid($pgwResponse)) {
             throw new RequestNotSupportedException('Not valid PGW Response');

@@ -2,6 +2,9 @@
 
 namespace Locastic\TcomPayWayPayumBundle\Controller\Api;
 
+use Locastic\TcomPayWay\AuthorizeDirect\Api;
+use Locastic\TcomPayWayPayumBundle\Request\GetApi;
+use Payum\Core\Payum;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,7 +15,7 @@ class PayWayController extends Controller
 {
     public function authorizationAnnounceAction(Request $request)
     {
-        $result = $this->get('locastic.tcompayway.api')->authorizationAnnounce(
+        $result = $this->getApi()->authorizationAnnounce(
             $request->request->get('pgwOrderId'),
             $request->request->get('pgwAmount'),
             $request->request->get('pgwAnnouncementDuration')
@@ -27,7 +30,7 @@ class PayWayController extends Controller
 
     public function authorizationCompleteAction(Request $request)
     {
-        $result = $this->get('locastic.tcompayway.api')->authorizationComplete(
+        $result = $this->getApi()->authorizationComplete(
             $request->request->get('pgwTransactionId'),
             $request->request->get('pgwAmount')
         );
@@ -41,7 +44,7 @@ class PayWayController extends Controller
 
     public function authorizationCancelAction(Request $request)
     {
-        $result = $this->get('locastic.tcompayway.api')->authorizationCancel(
+        $result = $this->getApi()->authorizationCancel(
             $request->request->get('pgwTransactionId')
         );
 
@@ -54,7 +57,7 @@ class PayWayController extends Controller
 
     public function authorizationRefundAction(Request $request)
     {
-        $result = $this->get('locastic.tcompayway.api')->authorizationRefund(
+        $result = $this->getApi()->authorizationRefund(
             $request->request->get('pgwTransactionId'),
             $request->request->get('pgwAmount')
         );
@@ -68,7 +71,7 @@ class PayWayController extends Controller
 
     public function authorizationInfoAction(Request $request)
     {
-        $result = $this->get('locastic.tcompayway.api')->authorizationRefund(
+        $result = $this->getApi()->authorizationRefund(
             $request->request->get('pgwTransactionId'),
             $request->request->get('pgwOrderId')
         );
@@ -83,7 +86,7 @@ class PayWayController extends Controller
 
     public function installmentsAction(Request $request)
     {
-        $result = $this->get('locastic.tcompayway.api')->installments(
+        $result = $this->getApi()->installments(
             $request->request->get('pgwAmount'),
             $request->request->get('pgwCreditCard')
         );
@@ -93,5 +96,18 @@ class PayWayController extends Controller
         }
 
         return new JsonResponse($result);
+    }
+
+    /**
+     * @return Api
+     */
+    private function getApi()
+    {
+        /** @var Payum $payum */
+        $payum = $this->get('payum');
+
+        $payum->getGateway('tcompayway')->execute($getApi = new GetApi());
+        
+        return $getApi->getApi();
     }
 }
